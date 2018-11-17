@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wanmudong.oamly.modules.user.mapper.StepsMapper">
+
+
+    <update id="updateLog">
+
+        update oa_recruit_log set step_${status}='${desc}' where rid= #{id}
+
+    </update>
+    <update id="clearRecruitLog">
+
+        update oa_recruit_log  set step_0 =#{desc},step_1='' ,step_2='',step_3='',step_4='' where rid=#{id}
+
+    </update>
+</mapper>

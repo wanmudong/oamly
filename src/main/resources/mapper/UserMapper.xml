@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wanmudong.oamly.modules.user.mapper.UserMapper">
+
+    <resultMap id="SysUserResultMap" type="SysUser" >
+        <id column="pwd" property="password"/>
+        <result column="stuid" property="username"/>
+        <!-- <association property="user" javaType="com.quinnnorris.mybatis.bean.User">
+            <id column="" property="" />
+            <result column="" property="" />
+        </association> -->
+        <!--<collection property="orderdetails" ofType="com.quinnnorris.mybatis.bean.Orderdetail">
+            <id column="" property=""/>
+            <result column="" property=""/>
+        </collection>-->
+    </resultMap>
+    <insert id="insertUser">
+        insert into oa_member (stuid,`name`,sex,depart,role,pwd,salt,status,join_time,phone,qq,campus,college,major) values(#{recruit.stuid},
+            #{recruit.name},
+            #{recruit.sex},
+            #{recruit.depart},
+            0,
+            #{pwd},
+            #{salt},
+            1,
+            #{time},
+            #{recruit.phone},
+            #{recruit.qq},
+            #{recruit.campus},
+            #{recruit.college},
+            #{recruit.major})
+
+    </insert>
+    <update id="updatePwd">
+        update  oa_member set pwd=#{pwd} where id=#{uid}
+    </update>
+    <update id="updateMemberByMe">
+        update oa_member
+        set
+            <if test="user.qq != null">
+                 qq=#{user.qq},
+            </if>
+            <if test="user.email != null">
+                 email=#{user.email},
+            </if>
+            <if test="user.phone != null">
+                phone=#{user.phone},
+            </if>
+            <if test="user.debitcard != null">
+                debitcard=#{user.debitcard},
+            </if>
+            stuid=#{user.stuid}
+
+        where stuid=#{user.stuid}
+
+
+    </update>
+
+    <select id="getUsers" resultType="User">
+        select * from oa_member
+    </select>
+
+    <select id="findSysUserByUsername"  resultMap="SysUserResultMap">
+        select * from oa_member where stuid = #{username}
+    </select>
+    <select id="getSysUserRoleList">
+        select * from sys_role where id in (select role_id from sys_member_role where stuid=#{username})
+    </select>
+    <select id="getUserByStuid" resultType="User">
+        select id,stuid,name,sex,depart,debitcard,role,status,join_time,exit_time,phone,email,qq,campus,college,major from oa_member where stuid=#{stuid}
+    </select>
+    <select id="getUserLogin" resultType="User">
+        select id,avatar_url,stuid,name,depart,role from oa_member where stuid =#{username}
+    </select>
+    <select id="getUserByContent" resultType="User">
+        select
+        id,stuid,`name`,sex,depart,role,status,join_time,exit_time,phone,email,qq,campus,college,major
+        <if test="sysuser.role==1 and sysuser.depart==1">
+        ,debitcard
+        </if>
+        from oa_member
+        where
+        (stuid like  concat('%',#{condition.content},'%') or `name`  like concat('%',#{condition.content},'%') or phone  like concat('%',#{condition.content},'%'))
+        <if test="sysuser.role==1">
+            and depart =#{sysuser.depart}
+            and campus=#{sysuser.campus}
+            and status=1
+        </if>
+        <if test="sysuser.role==2 or sysuser.role==3">
+            <if test="condition.depart !=null  and condition.depart !=''">
+            and depart =#{condition.depart}
+            </if>
+            <if test="condition.campus !=null  and condition.campus !=''">
+                and campus=#{condition.campus}
+            </if>
+            and status=1
+        </if>
+        <if test="sysuser.role==1024">
+            <if test="condition.depart !=null  and condition.depart !=''">
+                and depart =#{condition.depart}
+            </if>
+            <if test="condition.campus !=null  and condition.campus !=''">
+                and campus=#{condition.campus}
+            </if>
+        </if>
+
+
+
+    </select>
+    <select id="selectDepartByUid" resultType="java.lang.String">
+        select dict_item_name from oa_member as om ,oa_dict_depart as od where om.id=#{uid} and om.depart=od.dict_id
+    </select>
+    <select id="selectNameByUid" resultType="java.lang.String">
+        select `name` from oa_member where id = #{uid}
+    </select>
+</mapper>

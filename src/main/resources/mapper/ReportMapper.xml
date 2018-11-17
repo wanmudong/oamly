@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wanmudong.oamly.modules.report.mapper.ReportMapper">
+    <update id="setStatusByName">
+
+        update oa_setting set value=#{value} where name=#{name}
+    </update>
+    <update id="setReport">
+
+        insert into oa_report
+        (
+        uid,start_date,end_date,time_report,content,suggestion
+        )
+        values
+        (
+        #{uid},#{work_start_date},#{work_end_date},#{secondTimeNow},#{content},#{suggestion}
+        )
+    </update>
+    <update id="reviewReport">
+        update oa_report
+        set
+        <if test="salary != null">
+            salary=#{salary},
+        </if>
+        <if test="comment != null">
+            comment=#{comment},
+        </if>
+        <if test="rate != null">
+            rate=#{rate},
+        </if>
+        <if test="salary_sug != null">
+            salary_sug=#{salary_sug},
+        </if>
+        id=#{id}
+
+        where id=#{id}
+    </update>
+
+    <select id="getHistory" resultType="top.wanmudong.oamly.modules.report.entity.Report">
+        select oa_report.* from oa_report,oa_member where oa_report.uid=oa_member.id and oa_member.stuid=#{uid} order by id desc
+    </select>
+    <select id="getStatusByName" resultType="java.lang.String">
+        select `value` from oa_setting where `name`=#{name}
+    </select>
+    <select id="getStatusByTime" resultType="java.lang.Integer">
+        select count(*) from oa_report where uid=#{uid} and  time_report &gt; #{report_start_date}
+    </select>
+    <select id="getReportByContent" resultType="top.wanmudong.oamly.modules.report.entity.Report">
+
+        select
+        r.start_date,
+        r.end_date,
+        r.salary,
+        r.salary_sug,
+        r.time_report,
+        r.rate,
+        r.content,
+        r.suggestion,
+        r.comment,
+        m.status,
+        m.name,
+        r.id
+        from oa_report r left  join oa_member m on r.uid=m.id
+        where  ( m.stuid  like concat('%',#{condition.contact},'%') or
+            m.name  like concat('%',#{condition.contact},'%') or
+            m.phone  like concat('%',#{condition.contact},'%') )
+           and r.start_date=#{time}
+        <if test="sysuser.role==1">
+            and m.depart =#{sysuser.depart}
+            and m.campus=#{sysuser.campus}
+            and m.status=1
+        </if>
+        <if test="sysuser.role==2 or sysuser.role==3">
+            <if test="condition.depart !=null  and condition.depart !=''">
+                and m.depart =#{condition.depart}
+            </if>
+            <if test="condition.campus !=null  and condition.campus !=''">
+                and m.campus=#{condition.campus}
+            </if>
+            and m.status=1
+        </if>
+        <if test="sysuser.role==1024">
+            <if test="condition.depart !=null  and condition.depart !=''">
+                and m.depart =#{condition.depart}
+            </if>
+            <if test="condition.campus !=null  and condition.campus !=''">
+                and m.campus=#{condition.campus}
+            </if>
+        </if>
+          order by r.id desc
+    </select>
+    <select id="selectReportTimes" resultType="java.lang.Long">
+    select distinct start_date from oa_report order by start_date desc
+    </select>
+    <select id="getReportByContentExcel" resultType="top.wanmudong.oamly.modules.report.entity.ReportExcel">
+        select
+        r.salary,
+        r.time_report,
+        r.content,
+        m.status,
+        m.name,
+        m.debitcard,
+        m.phone,
+        m.college,
+        m.sex,
+        m.stuid,
+        m.depart
+        from oa_report r left  join oa_member m on r.uid=m.id
+        where  ( m.stuid  like concat('%',#{condition.contact},'%') or
+        m.name  like concat('%',#{condition.contact},'%') or
+        m.phone  like concat('%',#{condition.contact},'%') )
+        and r.start_date=#{time}
+        <if test="sysuser.role==1">
+            and m.depart =#{sysuser.depart}
+            and m.campus=#{sysuser.campus}
+            and m.status=1
+        </if>
+        <if test="sysuser.role==2 or sysuser.role==3">
+            <if test="condition.depart !=null  and condition.depart !=''">
+                and m.depart =#{condition.depart}
+            </if>
+            <if test="condition.campus !=null  and condition.campus !=''">
+                and m.campus=#{condition.campus}
+            </if>
+            and m.status=1
+        </if>
+        <if test="sysuser.role==1024">
+            <if test="condition.depart !=null  and condition.depart !=''">
+                and m.depart =#{condition.depart}
+            </if>
+            <if test="condition.campus !=null  and condition.campus !=''">
+                and m.campus=#{condition.campus}
+            </if>
+        </if>
+        order by r.id desc
+
+    </select>
+</mapper>

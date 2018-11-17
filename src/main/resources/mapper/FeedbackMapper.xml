@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wanmudong.oamly.modules.feedback.mapper.FeedbackMapper">
+    <insert id="insertFeedback">
+        insert into oa_feedback (type,content,uid,ftime,status,ip)values(#{feedback.type},#{feedback.content},#{feedback.uid},#{feedback.ftime},#{feedback.status},#{feedback.ip})
+    </insert>
+
+    <select id="selectAllFeedback" resultType="top.wanmudong.oamly.modules.feedback.entity.Feedback">
+    select * from oa_feedback where  status=1 order by id desc
+    </select>
+</mapper>

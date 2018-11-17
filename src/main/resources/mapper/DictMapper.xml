@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wanmudong.oamly.modules.user.mapper.DictMapper">
+    <resultMap id="dictResultMap" type="Dict" >
+        <result column="dict_item_name" property="value"/>
+        <result column="dict_id" property="key"/>
+        <!-- <association property="user" javaType="com.quinnnorris.mybatis.bean.User">
+            <id column="" property="" />
+            <result column="" property="" />
+        </association> -->
+        <!--<collection property="orderdetails" ofType="com.quinnnorris.mybatis.bean.Orderdetail">
+            <id column="" property=""/>
+            <result column="" property=""/>
+        </collection>-->
+    </resultMap>
+
+    <select id="getDictByTableName" resultMap="dictResultMap">
+        select dict_id,dict_item_name from ${tableName}
+    </select>
+
+    <select id="getDictTableNames" resultType="java.lang.String">
+        select dict_table_name from oa_dict
+    </select>
+
+    <select id="getDictMemo" resultType="java.lang.String">
+        select dict_memo from oa_dict where dict_table_name=#{dict_table_name}
+    </select>
+    <select id="getDepartIdByName" resultType="java.lang.String">
+        select dict_id from oa_dict_depart where dict_item_name=#{depart}
+    </select>
+    <select id="getCampusIdByName" resultType="java.lang.String">
+        select dict_id from oa_dict_campus where dict_item_name=#{campus}
+    </select>
+    <select id="getDepartNameById" resultType="java.lang.String">
+         select dict_item_name from oa_dict_depart where dict_id =#{depart}
+    </select>
+    <select id="selectFeedbackTypeNameById" resultType="java.lang.String">
+        select dict_item_name from oa_dict_feedback where dict_id=#{type}
+    </select>
+</mapper>
