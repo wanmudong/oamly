@@ -36,7 +36,7 @@ public class ArticleController {
     /**
      * 列表
      */
-//   @RequiresPermissions("news:article:list")
+   @RequiresPermissions("news:article:list")
     @GetMapping("/list")
     public Result list(String tags,@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10")int pageSize) {
         PageHelper.startPage(pageNo,pageSize);
@@ -48,7 +48,7 @@ public class ArticleController {
 
 
     @GetMapping("/info/{id}")
-//    @RequiresPermissions("news:article:info")
+    @RequiresPermissions("news:article:info")
     public Result detail(@PathVariable("id") Long id){
         Article article=articleService.getDetail(id);
         return Result.OK().put("data",article);
@@ -61,9 +61,9 @@ public class ArticleController {
      * 更新管理后台文章
      */
 
-//   @RequiresPermissions("news:article:upload")
+   @RequiresPermissions("news:article:upload")
     @GetMapping("/upload")
-    @Scheduled(cron = "0 0 21 ? * SUN")
+//    @Scheduled(cron = "0 0 21 ? * SUN")
     public Result upload(){
 
         String msg = articleService.uploadArticle();
@@ -79,7 +79,7 @@ public class ArticleController {
      * 审核文章
      */
     @PostMapping("/audit/{id}")
-//    @RequiresPermissions("news:article:audit")
+    @RequiresPermissions("news:article:audit")
     public Result audit(@PathVariable("id") Long id,  String comment,  Long pass) {
         Integer num;
         try {
@@ -94,7 +94,7 @@ public class ArticleController {
      * 保存（json格式）
      */
     @PostMapping("/save")
-//    @RequiresPermissions("news:article:save")
+    @RequiresPermissions("news:article:save")
     public Result save( @RequestBody String json) {
         log.info("收到了({})",json);
         try {
@@ -111,7 +111,7 @@ public class ArticleController {
      */
     @SysLog("修改文章")
     @PostMapping("/update")
-//    @RequiresPermissions("news:article:update")
+    @RequiresPermissions("news:article:update")
     public Result update(@RequestBody Article article) {
             articleService.updateById(article);
         return Result.OK();
@@ -123,7 +123,7 @@ public class ArticleController {
      */
     @SysLog("历史文章")
     @GetMapping("/history")
-//   @RequiresPermissions("news:article:history")
+   @RequiresPermissions("news:article:history")
     public Result history( String username,@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10") int pageSize) {
 
         MyPageInfo myPageInfo = articleService.getHistory(username);
@@ -136,7 +136,7 @@ public class ArticleController {
      */
     @SysLog("删除文章")
     @GetMapping("/delete/{id}")
-//    @RequiresPermissions("news:article:delete")
+    @RequiresPermissions("news:article:delete")
     public Result delete(@PathVariable("id")Long  id) {
             articleService.deleteById(id);
         return Result.OK();

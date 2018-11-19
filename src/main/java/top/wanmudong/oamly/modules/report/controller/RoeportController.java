@@ -34,7 +34,7 @@ public class RoeportController {
      * 获取个人汇报历史
      */
     @GetMapping("/history")
-    //@RequiresPermissions("report:history")
+    @RequiresPermissions("report:history")
     public Result history(String uid){
        List<Report> list =  reportService.getHistory(uid);
        return Result.OK().put("data",list);
@@ -45,7 +45,7 @@ public class RoeportController {
      * @return
      */
     @GetMapping("/status")
-//    @RequiresPermissions("report:status")
+    @RequiresPermissions("report:status")
     public Result getStatus(String uid){
         RDate rDate = reportService.getStatus(uid);
         return Result.OK().put("data",rDate);
@@ -55,7 +55,7 @@ public class RoeportController {
      * 获取成员的汇报信息
      */
     @GetMapping("")
-//    @RequiresPermissions("report:list")
+    @RequiresPermissions("report:list")
     public Result getReportsbByContact(Condition condition,@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10")int pageSize){
        MyPageInfo<ReportDto> pageInfo =  reportService.getReportByContent(condition,pageNo,pageSize,"");
        Result result = Result.OK().put("conditions",condition);
@@ -69,7 +69,7 @@ public class RoeportController {
      * @return
      */
     @PostMapping("/status")
-//    @RequiresPermissions("report:status:update")
+    @RequiresPermissions("report:status:update")
     public Result setStatus(RDate rDate){
         reportService.setStatus(rDate);
         return Result.OK();
@@ -79,7 +79,7 @@ public class RoeportController {
      * 存储接收到的汇报信息
      */
     @PostMapping("")
-//    @RequiresPermissions("report:save")
+    @RequiresPermissions("report:save")
     public Result getReportsbByContact(String content, String suggestion){
         RDate rDate  = reportService.setReport(content,suggestion);
         return Result.OK().put("data",rDate);
@@ -89,7 +89,7 @@ public class RoeportController {
      * 对某一汇报进行审核
      */
     @PostMapping("/review")
-//    @RequiresPermissions("report:review")
+    @RequiresPermissions("report:review")
     public Result reviewReport(int id,String comment,String rate,String salary_sug,String salary){
         reportService.reviewReport(id,comment,rate,salary_sug,salary);
         return Result.OK();
@@ -99,7 +99,7 @@ public class RoeportController {
      */
     @GetMapping("/excel")
     @ResponseBody
-//    @RequiresPermissions("report:list")
+    @RequiresPermissions("report:list")
     public void getXSSFWorkbook(HttpServletResponse response, Condition condition, String end_date, String start_date,@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10")int pageSize) throws IOException{
         reportService.getXSSFWorkbook(response,end_date,start_date,condition,pageNo,pageSize);
     }

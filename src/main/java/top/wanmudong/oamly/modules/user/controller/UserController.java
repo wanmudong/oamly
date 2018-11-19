@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.tomcat.jni.Time;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
@@ -81,7 +82,7 @@ public class UserController {
      */
     @GetMapping("/api/member")
     @ResponseBody
-//    @RequiresPermissions("user:member:list")
+    @RequiresPermissions("user:member:list")
     public Result getUserByContent(Condition condition,@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10")int pageSize){
 
         Map<String,Object> map = userService.getUserByContent(condition,pageNo,pageSize);
@@ -92,7 +93,7 @@ public class UserController {
      */
     @PostMapping("/api/member/{key}")
     @ResponseBody
-//    @RequiresPermissions("user:member:update")
+    @RequiresPermissions("user:member:update")
     public Result updateMember(User user, @PathVariable("key") String key){
 
         Boolean success = userService.updateMember(user);
@@ -104,7 +105,7 @@ public class UserController {
      */
     @GetMapping("/api/member/excel")
     @ResponseBody
-  //  @RequiresPermissions("user:member:list")
+    @RequiresPermissions("user:member:list")
     public void getExcel(HttpServletResponse response, Condition condition,@RequestParam int pageNo, @RequestParam int pageSize) throws IOException{
         userService.getXSSFWorkbook(response,condition, pageNo, pageSize);
     }
@@ -113,7 +114,7 @@ public class UserController {
      */
     @PostMapping("/api/me/pwd")
     @ResponseBody
-//    @RequiresPermissions("")
+    @RequiresUser
     public Result updateMemberPwd(String uid, String oldPwd,String newPwd){
         userService.updateMemberPwd(uid,oldPwd,newPwd);
         return Result.OK();
@@ -124,6 +125,7 @@ public class UserController {
      */
     @PostMapping("/api/me/{key}")
     @ResponseBody
+    @RequiresUser
     public Result updateMemberByMe(@PathVariable("key") String key,User user){
         userService.updateMemberByMe(key,user);
         return Result.OK();
@@ -133,6 +135,7 @@ public class UserController {
      */
     @PostMapping("/api/member/add")
     @ResponseBody
+    @RequiresPermissions("user:member:add")
     public Result addMember(User user){
         userService.insert(user);
         return Result.OK();
@@ -142,6 +145,7 @@ public class UserController {
      */
     @GetMapping("/api/member/del/{key}")
     @ResponseBody
+    @RequiresPermissions("user:member:del")
     public Result delMember(@PathVariable("key") String key){
         userService.deleteById(key);
         return Result.OK();

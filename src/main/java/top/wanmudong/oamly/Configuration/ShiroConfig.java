@@ -22,11 +22,6 @@ import java.util.Map;
 public class ShiroConfig {
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
-        System.out.println("ShiroConfiguration.shirFilter()");
-
-
-
-
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
@@ -179,30 +174,5 @@ public class ShiroConfig {
 //        return credentialsMatcher;
 //    }
 //
-//    /**
-//     * 缓存管理器 使用Ehcache实现
-//     */
-//    @Bean(name = "shiroCacheManager")
-//    public CacheManager cacheManager(/*EhCacheCacheManager cacheManager*/) {
-//
-////        log.info("shiroCacheManager注入成功！");
-//        EhCacheManager ehCacheManager = new EhCacheManager();
-//        // ehCacheManager.setCacheManager(cacheManager.getCacheManager());
-//        ehCacheManager.setCacheManagerConfigFile("classpath:config/ehcache-shiro.xml");
-//        ehCacheManager.init();
-//        System.out.println("shiroCacheManager注入成功！");
-//        return ehCacheManager;
-//
-//    }
-//
-//    /**
-//     * 启用shrio授权注解拦截方式，AOP式方法级权限检查
-//     */
-//    @Bean
-//    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {
-//        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor =
-//                new AuthorizationAttributeSourceAdvisor();
-//        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-//        return authorizationAttributeSourceAdvisor;
-//    }
+
 }

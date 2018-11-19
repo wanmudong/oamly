@@ -39,7 +39,7 @@ public class RealmKit implements IShiro {
      return userDao.findSysUserByUsername(username);
     }
 
-    public SysRole getSysUserRoleList(String username){
+    public List<SysRole> getSysUserRoleList(String username){
 
        return userDao.getSysUserRoleList(username);
     }

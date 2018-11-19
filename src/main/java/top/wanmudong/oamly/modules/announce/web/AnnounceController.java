@@ -48,7 +48,7 @@ public class AnnounceController {
      * 上传通知
      */
     @PostMapping("")
-//    @RequiresPermissions("announce:post")
+    @RequiresPermissions("announce:post")
     public Result setAnnounceModel(@Valid Announce announce){
             announceService.setAnnounce(announce);
         return  Result.OK();
@@ -60,7 +60,7 @@ public class AnnounceController {
      * @return
      */
     @GetMapping("/del")
-//    @RequiresPermissions("announce:delete")
+    @RequiresPermissions("announce:delete")
     public Result setAnnounceModel(String id) {
         announceService.deleteById(Integer.valueOf(id));
         return Result.OK();

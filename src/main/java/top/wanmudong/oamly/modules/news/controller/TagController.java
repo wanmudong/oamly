@@ -32,8 +32,8 @@ public class TagController {
     /**
      * 更新标签库
      */
-//    @GetMapping("api/tag/update")
-    @Scheduled(cron = "0 0 21 ? * SUN")
+    @GetMapping("api/tag/update")
+//    @Scheduled(cron = "0 0 21 ? * SUN")
     @RequiresPermissions("news:tag:update")
     public Result updateTag(){
             tagService.updateTag();
@@ -44,7 +44,7 @@ public class TagController {
      * 获取标签库
      */
     @GetMapping("api/tag/get")
-//    @RequiresPermissions("news:tag:list")
+    @RequiresPermissions("news:tag:list")
     public Result getTag(){
         List<Tag> list = tagService.getTags();
         return Result.OK().put("data",list);

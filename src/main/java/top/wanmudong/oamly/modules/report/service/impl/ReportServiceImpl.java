@@ -64,8 +64,6 @@ public class ReportServiceImpl  extends ServiceImpl<ReportMapper, Report> implem
         {
             rDate.setReport_stat(state);
         }else {
-            long q = Long.parseLong(timeUtil.dateTimeStamp(report_start_date,"yyyy-MM-dd"));
-            long w = Long.parseLong(timeUtil.dateTimeStamp(report_end_date,"yyyy-MM-dd"));
             int times = baseMapper.getStatusByTime(Long.parseLong(timeUtil.dateTimeStamp(report_start_date,"yyyy-MM-dd")),Long.parseLong(timeUtil.dateTimeStamp(report_end_date,"yyyy-MM-dd")), Integer.parseInt(uid));
             if (times>0){
                 rDate.setReport_stat("done");

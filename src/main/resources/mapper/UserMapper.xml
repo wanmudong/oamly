@@ -63,7 +63,7 @@
     <select id="findSysUserByUsername"  resultMap="SysUserResultMap">
         select * from oa_member where stuid = #{username}
     </select>
-    <select id="getSysUserRoleList">
+    <select id="getSysUserRoleList" resultType="top.wanmudong.oamly.modules.common.entity.SysRole">
         select * from sys_role where id in (select role_id from sys_member_role where stuid=#{username})
     </select>
     <select id="getUserByStuid" resultType="User">

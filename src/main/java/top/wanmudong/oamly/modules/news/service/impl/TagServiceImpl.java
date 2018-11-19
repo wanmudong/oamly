@@ -4,6 +4,7 @@ package top.wanmudong.oamly.modules.news.service.impl;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import top.wanmudong.oamly.modules.common.utils.JsonMapper;
 import top.wanmudong.oamly.modules.news.entity.ResultTags;
@@ -17,6 +18,7 @@ import java.util.List;
  * Created by chenjiehao on 2018/10/27
  */
 @Service("TagService")
+@Transactional
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
 
     public Boolean updateTag(){

@@ -3,6 +3,7 @@ package top.wanmudong.oamly.modules.common.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
+@TableName("sys_permission")
 public class SysPermission implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,7 +41,7 @@ public class SysPermission implements Serializable {
      * 授权(多个用逗号分隔，如：user:list,user:create)
      */
     @TableField("permission")
-    private String perms;
+    private String permission;
 
     /**
      * 排序
@@ -65,85 +67,4 @@ public class SysPermission implements Serializable {
     @TableField(exist=false)
     private String parentName;
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getPid() {
-        return pid;
-    }
-
-    public void setPid(Integer pid) {
-        this.pid = pid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPerms() {
-        return perms;
-    }
-
-    public void setPerms(String perms) {
-        this.perms = perms;
-    }
-
-    public Integer getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
-    }
-
-    public int getOpen() {
-        return open;
-    }
-
-    public void setOpen(int open) {
-        this.open = open;
-    }
-
-    public List<SysPermission> getList() {
-        return list;
-    }
-
-    public void setList(List<SysPermission> list) {
-        this.list = list;
-    }
-
-    public String getParentName() {
-        return parentName;
-    }
-
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
-    }
-
-    @Override
-    public String toString() {
-        return "SysPermission{" +
-                "id=" + id +
-                ", pid=" + pid +
-                ", name='" + name + '\'' +
-                ", perms='" + perms + '\'' +
-                ", orderNum=" + orderNum +
-                ", open=" + open +
-                ", list=" + list +
-                ", parentName='" + parentName + '\'' +
-                '}';
-    }
 }

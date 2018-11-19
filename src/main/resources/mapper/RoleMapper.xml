@@ -5,8 +5,8 @@
         select * from sys_role where id in (select role_id from sys_member_role where stuid=#{username})
     </select>
 
-    <select id="getPermissions">
-        select * from sys_role_permission rp left join sys_permission p on rp.permission_id = p.id where rp.role_id=#{role_id}
+    <select id="getPermissions" resultType="top.wanmudong.oamly.modules.common.entity.SysPermission">
+        select p.* from sys_role_permission rp , sys_permission p  where  rp.permission_id = p.id and rp.role_id=#{role_id} order by p.id
     </select>
 
 </mapper>

@@ -14,7 +14,7 @@ public interface IShiro {
 
     public SysUser getSysuser(String username);
 
-    public SysRole getSysUserRoleList(String username);
+    public List<SysRole> getSysUserRoleList(String username);
     public List<SysPermission> getPermissions(SysRole role);
 
     SysUser findSysUserByUsername(String i);

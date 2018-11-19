@@ -38,7 +38,7 @@ public class RecruitController {
      * 获取当前所有的招新信息
      */
     @GetMapping("/api/recruit")
-//    @RequiresPermissions("user:recruit:list")
+    @RequiresPermissions("user:recruit:list")
     @ResponseBody
     public Result getRecruit(Condition condition,@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10")int pageSize){
 
@@ -50,7 +50,7 @@ public class RecruitController {
      * 单独获取一条招新信息
      */
     @GetMapping ("api/recruit/{id}")
-//    @RequiresPermissions("user:recruit:info")
+    @RequiresPermissions("user:recruit:info")
     public Result getRecruitById(@PathVariable("id") int id){
         RecruitDto recruitDto = recruitService.getRecruitById(id);
         return Result.OK().put("data",recruitDto);
@@ -59,7 +59,7 @@ public class RecruitController {
      * 更新招新信息
      */
     @PostMapping ("api/recruit/{id}")
-   // @RequiresPermissions("user:recruit:update")
+    @RequiresPermissions("user:recruit:update")
     public Result updateRecruit(@PathVariable("id") int id, int status, String desc, String depart){
        RecruitDto recruitDto =  recruitService.updateRecruit(id,status,desc,depart);
        return Result.OK().put("data",recruitDto);
@@ -70,7 +70,7 @@ public class RecruitController {
      */
     @GetMapping("/api/recruit/excel")
     @ResponseBody
-//    @RequiresPermissions("user:recruit:list")
+    @RequiresPermissions("user:recruit:list")
     public void gerExcel(HttpServletResponse response, Condition condition,@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10")int pageSize) throws IOException{
         recruitService.getXSSFWorkbook(response,condition,pageNo,pageSize);
     }
@@ -78,7 +78,7 @@ public class RecruitController {
     /**
      * 删除招新信息
      */
-//    @GetMapping("/api/recruit/del/{key}")
+    @GetMapping("/api/recruit/del/{key}")
     @ResponseBody
     public Result delRecruit(@PathVariable("key" )int key){
         recruitService.delRecruit(key);
@@ -88,7 +88,7 @@ public class RecruitController {
     /**
      * 新增招新信息
      */
-//    @GetMapping("/api/recruit/add")
+    @GetMapping("/api/recruit/add")
     @ResponseBody
     public Result delRecruit(Recruit recruit){
         recruitService.insert(recruit);

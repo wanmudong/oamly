@@ -36,7 +36,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param username
      * @return
      */
-    SysRole getSysUserRoleList(String username);
+    List<SysRole> getSysUserRoleList(String username);
 
     /**
      * 通过Stuid获取用户详细信息

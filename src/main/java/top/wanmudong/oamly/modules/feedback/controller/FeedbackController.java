@@ -30,7 +30,7 @@ public class FeedbackController {
      * @return
      */
     @GetMapping("")
-//    @RequiresPermissions("feedback:list")
+    @RequiresPermissions("feedback:list")
     public Result getAllFeedback(@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10")int pageSize){
             PageHelper.startPage(pageNo,pageSize);
             MyPageInfo<FeedbackDto> pageInfo = feedbackService.getAllFeedback();
@@ -41,7 +41,7 @@ public class FeedbackController {
      * 存储一个反馈信息
      */
     @PostMapping("")
-//    @RequiresPermissions("feedback:add")
+    @RequiresPermissions("feedback:add")
     public Result setFeedback(int value, String content,HttpServletRequest request){
         feedbackService.setFeedback(value,content,request);
         return Result.OK();
