@@ -15,7 +15,9 @@ public enum OrderExceptionEnum {
     /** 系统错误 */
     SYSTEM_ERROR("OE002","系统错误","error"),
     /** 用户未登录 */
-    SYSUSER_ERROR("201","用户未登录","error"),
+    USER_NOT_LOGIN_ERROR("201","用户未登录","error"),
+    /** 用户已存在 */
+    USER_ALREADY_EXIST_ERROR("202","用户已存在","error"),
     /** 查询不存在错误 */
     THIS_CONTENT_NOT_FOUND_ERROR("301","该条记录不存在","error")
     ;

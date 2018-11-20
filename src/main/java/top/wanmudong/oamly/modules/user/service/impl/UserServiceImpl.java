@@ -52,6 +52,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String salt = oa_md5.radomString();
         String pwd = oa_md5.md5_salt(password,salt);
         int time = timeUtil.getSecondTimeNow();
+
+        User user = baseMapper.selectByStuid(recruit.getStuid());
+        if (user == null){
+
+        }
         baseMapper.insertUser(recruit,pwd,salt,time);
         User user = baseMapper.getUserByStuid(recruit.getStuid());
         return user;

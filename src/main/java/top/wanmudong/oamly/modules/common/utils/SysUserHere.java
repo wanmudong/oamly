@@ -13,7 +13,7 @@ public class SysUserHere {
     public static SysUser getSysUser(){
         SysUser sysuser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         if (sysuser == null){
-            throw new SysUserException(OrderExceptionEnum.SYSUSER_ERROR);
+            throw new SysUserException(OrderExceptionEnum.SYSUSER_NOT_LOGIN_ERROR);
         }
         return sysuser;
     }

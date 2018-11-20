@@ -113,4 +113,7 @@
     <select id="selectNameByUid" resultType="java.lang.String">
         select `name` from oa_member where id = #{uid}
     </select>
+    <select id="selectByStuid" resultType="top.wanmudong.oamly.modules.user.entity.User">
+        select * from oa_member where stuid = #{stuid}
+    </select>
 </mapper>

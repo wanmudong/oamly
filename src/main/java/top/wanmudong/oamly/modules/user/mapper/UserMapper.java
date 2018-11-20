@@ -85,4 +85,10 @@ public interface UserMapper extends BaseMapper<User> {
      */
     String selectNameByUid(@Param("uid") int uid);
 
+    /**
+     * 通过stuid查询成员
+     * @param stuid
+     * @return
+     */
+    User selectByStuid(@Param("stuid") String stuid);
 }
