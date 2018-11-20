@@ -67,7 +67,7 @@
         select * from sys_role where id in (select role_id from sys_member_role where stuid=#{username})
     </select>
     <select id="getUserByStuid" resultType="User">
-        select id,stuid,name,sex,depart,debitcard,role,status,join_time,exit_time,phone,email,qq,campus,college,major from oa_member where stuid=#{stuid}
+        select id,stuid,`name`,sex,depart,debitcard,role,status,join_time,exit_time,phone,email,qq,campus,college,major from oa_member where stuid=#{stuid}
     </select>
     <select id="getUserLogin" resultType="User">
         select id,avatar_url,stuid,name,depart,role from oa_member where stuid =#{username}

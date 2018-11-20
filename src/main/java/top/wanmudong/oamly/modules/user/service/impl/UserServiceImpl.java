@@ -6,7 +6,10 @@ import com.github.pagehelper.PageInfo;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.xssf.usermodel.*;
+import top.wanmudong.oamly.modules.common.Enum.OrderExceptionEnum;
 import top.wanmudong.oamly.modules.common.entity.SysUser;
+import top.wanmudong.oamly.modules.common.exception.ContentNotExistException;
+import top.wanmudong.oamly.modules.common.exception.UserAlreadyExistException;
 import top.wanmudong.oamly.modules.common.utils.*;
 import top.wanmudong.oamly.modules.user.entity.Recruit;
 import top.wanmudong.oamly.modules.user.entity.User;
@@ -53,9 +56,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String pwd = oa_md5.md5_salt(password,salt);
         int time = timeUtil.getSecondTimeNow();
 
-        User user = baseMapper.selectByStuid(recruit.getStuid());
-        if (user == null){
-
+        User userExist = baseMapper.getUserByStuid(recruit.getStuid());
+        if (userExist != null){
+            throw new UserAlreadyExistException(OrderExceptionEnum.USER_ALREADY_EXIST_ERROR);
         }
         baseMapper.insertUser(recruit,pwd,salt,time);
         User user = baseMapper.getUserByStuid(recruit.getStuid());
