@@ -5,12 +5,19 @@ package top.wanmudong.oamly.modules.common.Enum;
  */
 public enum OrderExceptionEnum {
 
+    /**
+     * 0 未知
+     * 2 用户问题
+     * 3 查询内容问题
+     */
     /** 未知异常 */
     UNKNOWN_EXCEPTION("000","未知异常","warn"),
     /** 系统错误 */
     SYSTEM_ERROR("OE002","系统错误","error"),
     /** 用户未登录 */
-    SYSUSER_ERROR("201","用户未登录","error")
+    SYSUSER_ERROR("201","用户未登录","error"),
+    /** 查询不存在错误 */
+    THIS_CONTENT_NOT_FOUND_ERROR("301","该条记录不存在","error")
     ;
 
     private String errorCode;

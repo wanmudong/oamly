@@ -74,5 +74,14 @@ public class GlobalControllerExceptionHandler {
         log.error("未知错误",e);
         return Result.error("未知错误");
     }
+    /**
+     * 系统抛出的未知异常统一返回
+     */
+    @ResponseBody
+    @ExceptionHandler(value = ContentNotExistException.class)
+    public Result defaultContentNotExistExceptionHandler(HttpServletRequest req, Exception e) {
+        log.error("查询内容不存在",e);
+        return Result.error("查询内容不存在");
+    }
 
 }

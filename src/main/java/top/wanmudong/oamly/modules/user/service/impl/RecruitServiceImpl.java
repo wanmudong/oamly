@@ -9,7 +9,10 @@ import org.apache.poi.xssf.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import top.wanmudong.oamly.modules.common.Enum.OrderExceptionEnum;
 import top.wanmudong.oamly.modules.common.entity.SysUser;
+import top.wanmudong.oamly.modules.common.exception.ContentNotExistException;
+import top.wanmudong.oamly.modules.common.exception.SysUserException;
 import top.wanmudong.oamly.modules.common.utils.*;
 import top.wanmudong.oamly.modules.user.entity.*;
 import top.wanmudong.oamly.modules.user.mapper.DictMapper;
@@ -80,6 +83,9 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
     public RecruitDto getRecruitById(int id) {
         List list = new ArrayList();
         Recruit recruit = baseMapper.selectById(id);
+        if (recruit == null){
+            throw new ContentNotExistException(OrderExceptionEnum.THIS_CONTENT_NOT_FOUND_ERROR);
+        }
         Steps steps = stepsMapper.selectById(id);
         if (steps!=null){
             Step step0 = new Step(0,"待处理",steps.getStep0()!=null?steps.getStep0():"");
