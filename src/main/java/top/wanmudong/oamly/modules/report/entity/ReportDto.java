@@ -77,4 +77,9 @@ public class ReportDto {
      * 汇报时间
      */
     private String time_report;
+    /**
+     * 返回成员性质
+     * normal,notThisDepart
+     */
+    private String status;
 }

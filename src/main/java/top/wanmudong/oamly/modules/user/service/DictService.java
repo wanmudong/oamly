@@ -18,4 +18,6 @@ public interface DictService extends IService<Dict> {
      * @return
      */
     Map<String, List<Dict>> getAllDict();
+
+    List<Dict> getDictSummaryList();
 }

@@ -6,9 +6,9 @@ import com.github.pagehelper.PageInfo;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.xssf.usermodel.*;
+import org.springframework.transaction.annotation.Transactional;
 import top.wanmudong.oamly.modules.common.Enum.OrderExceptionEnum;
 import top.wanmudong.oamly.modules.common.entity.SysUser;
-import top.wanmudong.oamly.modules.common.exception.ContentNotExistException;
 import top.wanmudong.oamly.modules.common.exception.UserAlreadyExistException;
 import top.wanmudong.oamly.modules.common.utils.*;
 import top.wanmudong.oamly.modules.user.entity.Recruit;
@@ -47,11 +47,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User insertUser(User user) {
         return null;
     }
+    //初始密码为online666
+    private static final String PASSWORD="online666";
 
     @Override
     public User insertUser(Recruit recruit) {
-        //初始密码为online666
-        String password = oa_md5.md5("online666");
+
+        String password = oa_md5.md5(PASSWORD);
         String salt = oa_md5.radomString();
         String pwd = oa_md5.md5_salt(password,salt);
         int time = timeUtil.getSecondTimeNow();
@@ -122,6 +124,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return map;
     }
 
+    @Transactional
     @Override
     public Boolean updateMember(User user) {
 
@@ -134,15 +137,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //判断密码这一项是否需要更新
         if (user.getPwd() == null || user.getPwd().equals("")) {
             //如果不需要更新那么直接将sysUser的密码存入user即可
-//            user.setPwd(password);
+            user.setPwd(password);
         } else {
             //如果需要修改密码，那么我们需要获取到前台传给user的密码然后对其进行加盐加密存入数据库
             password = user.getPwd();
             password = md5_salt(password, salt);
             user.setPwd(password);
         }
-//        EntityWrapper<User> ew = new EntityWrapper<User>();
-//        ew.where("id=#{0}",user.getId());
+        //更改权限
+        if ("0".equals(user.getRole())){
+            baseMapper.updatePermissionByStuid(user.getStuid(),1);
+        }else if ("1".equals(user.getRole())){
+            baseMapper.updatePermissionByStuid(user.getStuid(),2);
+        }else {
+            baseMapper.updatePermissionByStuid(user.getStuid(),3);
+        }
         Integer success  = baseMapper.updateById(user);
         return success>0;
     }

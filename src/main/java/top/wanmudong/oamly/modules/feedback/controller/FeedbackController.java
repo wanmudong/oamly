@@ -32,9 +32,9 @@ public class FeedbackController {
     @GetMapping("")
     @RequiresPermissions("feedback:list")
     public Result getAllFeedback(@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10")int pageSize){
-            PageHelper.startPage(pageNo,pageSize);
-            MyPageInfo<FeedbackDto> pageInfo = feedbackService.getAllFeedback();
-            return Result.OK().put("data",pageInfo);
+        PageHelper.startPage(pageNo,pageSize);
+        MyPageInfo<FeedbackDto> pageInfo = feedbackService.getAllFeedback();
+        return Result.OK().put("data",pageInfo);
     }
 
     /**

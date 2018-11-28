@@ -27,11 +27,11 @@ import java.util.List;
 
 @Slf4j
 public class MyShiroRealm extends AuthorizingRealm {
-
-    @Resource
-    private UserMapper userDao;
-    @Resource
-    private RoleMapper roleDao;
+//
+//    @Resource
+//    private UserMapper userDao;
+//    @Resource
+//    private RoleMapper roleDao;
 
 
     /**

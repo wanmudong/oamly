@@ -85,4 +85,12 @@ public class Report implements Serializable {
     private String name;
     @TableField(exist=false)
     private String status;
+    /**
+     * 汇报者所在部门
+     */
+    private String depart;
+    /**
+     * 汇报者所在校区
+     */
+    private String campus;
 }

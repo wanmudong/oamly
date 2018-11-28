@@ -50,15 +50,6 @@ public class LoginController {
 
     @Resource
     private UserService userService;
-//    /**
-//     * 用于主页面通知的显示
-//     */
-//    @GetMapping("")
-//    public Result getAnnounceModel(){
-//        List list = announceService.getAnnounceList();
-//      return  Result.OK().put("data",list);
-//    }
-
 
 
     @PostMapping("/api/login")

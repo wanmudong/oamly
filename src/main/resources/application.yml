@@ -10,7 +10,7 @@ server:
         uri-encoding: UTF-8
         max-threads: 1000
         min-spare-threads: 30
-    port: 8082
+    port: 8080
     compression:
       enabled: true
       mime-types: application/json,application/xml,text/html,text/xml,text/plain,text/javascript,application/javascript,text/css

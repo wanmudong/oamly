@@ -1,6 +1,7 @@
 package top.wanmudong.oamly.modules.feedback.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -34,9 +35,9 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper,Feedback> im
         PageInfo<Feedback> pageInfo = new PageInfo<>( baseMapper.selectAllFeedback());
         List<Feedback> list1=pageInfo.getList();
         List<FeedbackDto> list = new ArrayList<>();
-        List<Feedback>list_f = baseMapper.selectAllFeedback();
+//        Page<Feedback> list_f = baseMapper.selectAllFeedback();
         int key = 0;
-        for (Feedback feedback:list_f)
+        for (Feedback feedback:list1)
         {
             FeedbackDto feedbackDto = new FeedbackDto();
             feedbackDto.setKey(key);

@@ -55,8 +55,11 @@
 
 
     </update>
+    <update id="updatePermissionByStuid">
+        update sys_member_role set role_id=#{roleId} where stuid=#{stuid}
+    </update>
 
-    <select id="getUsers" resultType="User">
+    <select id="getUsers" resultType="top.wanmudong.oamly.modules.user.entity.User">
         select * from oa_member
     </select>
 
@@ -78,22 +81,51 @@
         <if test="sysuser.role==1 and sysuser.depart==1">
         ,debitcard
         </if>
-        from oa_member
+        <if test="sysuser.role==2 and sysuser.depart==1">
+            ,debitcard
+        </if>
+        from oa_member as m
         where
         (stuid like  concat('%',#{condition.content},'%') or `name`  like concat('%',#{condition.content},'%') or phone  like concat('%',#{condition.content},'%'))
-        <if test="sysuser.role==1">
-            and depart =#{sysuser.depart}
-            and campus=#{sysuser.campus}
-            and status=1
+        <if test="sysuser.role==1  and sysuser.depart!=1">
+            and m.depart =#{sysuser.depart}
+            and m.campus=#{sysuser.campus}
+            and m.status=1
         </if>
-        <if test="sysuser.role==2 or sysuser.role==3">
+        <if test="sysuser.role==2 and sysuser.depart!=1">
+            and m.depart =#{sysuser.depart}
+            <if test="condition.campus !=null  and condition.campus !=''">
+                and m.campus=#{condition.campus}
+            </if>
+            and m.status=1
+        </if>
+        <if test="sysuser.role==1  and sysuser.depart==1">
+            <if test="condition.campus !=null  and condition.campus !=''">
+                and m.campus=#{condition.campus}
+            </if>
             <if test="condition.depart !=null  and condition.depart !=''">
-            and depart =#{condition.depart}
+                and m.depart =#{condition.depart}
+            </if>
+            and m.status=1
+        </if>
+        <if test="sysuser.role==2  and sysuser.depart==1">
+            <if test="condition.campus !=null  and condition.campus !=''">
+                and m.campus=#{condition.campus}
+            </if>
+            <if test="condition.depart !=null  and condition.depart !=''">
+                and m.depart =#{condition.depart}
+            </if>
+            and m.status=1
+        </if>
+
+        <if test="sysuser.role==3">
+            <if test="condition.depart !=null  and condition.depart !=''">
+                and m.depart =#{condition.depart}
             </if>
             <if test="condition.campus !=null  and condition.campus !=''">
-                and campus=#{condition.campus}
+                and m.campus=#{condition.campus}
             </if>
-            and status=1
+            and m.status=1
         </if>
         <if test="sysuser.role==1024">
             <if test="condition.depart !=null  and condition.depart !=''">

@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.wanmudong.oamly.modules.user.entity.Dict;
 import top.wanmudong.oamly.modules.user.mapper.DictMapper;
-import top.wanmudong.oamly.modules.user.mapper.UserMapper;
 import top.wanmudong.oamly.modules.user.service.DictService;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,5 +29,10 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
                 map.put(dict_name,list);
         }
         return map;
+    }
+
+    @Override
+    public List<Dict> getDictSummaryList() {
+        return null;
     }
 }

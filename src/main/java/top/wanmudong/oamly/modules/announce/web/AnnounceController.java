@@ -13,6 +13,7 @@ import top.wanmudong.oamly.modules.announce.entity.Announce;
 import top.wanmudong.oamly.modules.announce.service.AnnounceService;
 import top.wanmudong.oamly.modules.common.utils.Result;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -28,7 +29,7 @@ import java.util.List;
 @EnableAutoConfiguration
 @RequestMapping("/api/announce")
 public class AnnounceController {
-
+    @Resource
     private AnnounceService announceService;
 
     @Autowired

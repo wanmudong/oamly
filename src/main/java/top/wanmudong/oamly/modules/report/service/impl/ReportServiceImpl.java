@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static top.wanmudong.oamly.modules.report.Constant.DISPART_ERROR;
+import static top.wanmudong.oamly.modules.report.Constant.STATUS_NORMAL;
+
 
 /**
  * Created by chenjiehao on 2018/11/15
@@ -111,6 +114,23 @@ public class ReportServiceImpl  extends ServiceImpl<ReportMapper, Report> implem
             List list2 =new  ArrayList<>();
             for (Report report:list1){
                 ReportDto reportDto = ReportDtoConverter.INSTANCE.reportDto(report);
+//                对于办公室小部长，能查看所有的成员，但只能审核本校区本部门成员
+//                对于办公室大部长，能查看所有的成员，但只能审所有校区本部门成员
+                if ("1".equals(sysUser.getDepart())){
+                        if ("1".equals(report.getDepart())){
+                            if(report.getCampus().equals(sysUser.getCampus())){
+                                reportDto.setStatus(STATUS_NORMAL);
+                            }else {
+                                if ("2".equals(sysUser.getRole())){
+                                    reportDto.setStatus(STATUS_NORMAL);
+                                }else {
+                                    reportDto.setStatus(DISPART_ERROR);
+                                }
+                            }
+                        }else {
+                            reportDto.setStatus(DISPART_ERROR);
+                        }
+                }
                 list2.add(reportDto);
             }
             return new MyPageInfo (pageInfo,list2);
