@@ -7,6 +7,8 @@ import org.apache.poi.xssf.usermodel.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import top.wanmudong.oamly.modules.common.entity.SysUser;
 import top.wanmudong.oamly.modules.common.utils.*;
@@ -18,7 +20,9 @@ import top.wanmudong.oamly.modules.user.service.RecruitService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,7 +60,7 @@ public class RecruitController {
         return Result.OK().put("data",recruitDto);
     }
     /**
-     * 更新招新信息
+     * 修改招新情况
      */
     @PostMapping ("api/recruit/{id}")
     @RequiresPermissions("user:recruit:update")
@@ -86,12 +90,18 @@ public class RecruitController {
     }
 
     /**
-     * 新增招新信息
+     * 新增招新信息/修改招新信息
      */
     @GetMapping("/api/recruit/add")
     @ResponseBody
-    public Result delRecruit(Recruit recruit){
-        recruitService.insert(recruit);
+    public Result insertRecruit(@Valid Recruit recruit, BindingResult result){
+        if (result.hasErrors()){
+            List<ObjectError> list = result.getAllErrors();
+            for (ObjectError error : list) {
+               return Result.error(error.getDefaultMessage());
+            }
+        }
+        recruitService.insertRecruit(recruit);
         return Result.OK();
     }
 }

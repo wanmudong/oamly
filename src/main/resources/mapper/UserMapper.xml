@@ -31,6 +31,9 @@
             #{recruit.major})
 
     </insert>
+    <insert id="insertUserRole">
+        insert into sys_member_role (role_id,stuid) values (#{generalMember},#{recruit.stuid})
+    </insert>
     <update id="updatePwd">
         update  oa_member set pwd=#{pwd} where id=#{uid}
     </update>

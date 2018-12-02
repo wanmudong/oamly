@@ -25,4 +25,6 @@ public interface RecruitService extends IService<Recruit> {
     void getXSSFWorkbook(HttpServletResponse response, Condition condition, int pageNo, int pageSize) throws IOException;
 
     void delRecruit(int key);
+
+    void insertRecruit(Recruit recruit);
 }

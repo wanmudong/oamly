@@ -3,12 +3,14 @@ package top.wanmudong.oamly.modules.common.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.wanmudong.oamly.modules.common.utils.Result;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 
 /**
  * Created by chenjiehao on 2018/10/26
@@ -87,10 +89,19 @@ public class GlobalControllerExceptionHandler {
      * 查询内容不存在时的未知异常统一返回
      */
     @ResponseBody
-    @ExceptionHandler(value = UserAlreadyExistException.class)
-    public Result defaultUserAlreadyExistExceptionHandler(HttpServletRequest req, Exception e) {
-        log.error("用户已存在，请勿重复插入",e);
-        return Result.error("用户已存在，请勿重复插入");
+    @ExceptionHandler(value = ContentAlreadyExistException.class)
+    public Result defaultContentAlreadyExistExceptionHandler(HttpServletRequest req, Exception e) {
+        log.error("[{}]，请勿重复插入",e.getMessage(),e);
+        return Result.error(e.getMessage());
+    }
+    /**
+     * Insert或Update数据时违反了完整性，例如违反了惟一性限制时的未知异常统一返回
+     */
+    @ResponseBody
+    @ExceptionHandler(value = DataIntegrityViolationException.class)
+    public Result defaultDataIntegrityViolationExceptionHandler(HttpServletRequest req, Exception e) {
+        log.error("数据库插入或更新异常",e);
+        return Result.error("数据库插入或更新异常");
     }
 
 }

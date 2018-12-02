@@ -8,7 +8,7 @@ import top.wanmudong.oamly.modules.common.Enum.OrderExceptionEnum;
  *
  * 查询的内容不存在
  */
-public class UserAlreadyExistException extends  RuntimeException {
+public class ContentAlreadyExistException extends  RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,20 +19,20 @@ public class UserAlreadyExistException extends  RuntimeException {
     private ErrorContext errorContext;
 
 
-    public UserAlreadyExistException(String errorCode, String errorMsg){
+    public ContentAlreadyExistException(String errorCode, String errorMsg){
         super(errorMsg);
         this.errorCode = errorCode;
     }
-    public UserAlreadyExistException(OrderExceptionEnum orderExceptionEnum){
+    public ContentAlreadyExistException(OrderExceptionEnum orderExceptionEnum){
         super(orderExceptionEnum.getErrorMsg());
         this.errorCode = orderExceptionEnum.getErrorCode();
     }
 
-    public UserAlreadyExistException(String errorCode, String errorMsg, Throwable throwable){
+    public ContentAlreadyExistException(String errorCode, String errorMsg, Throwable throwable){
         super(errorMsg,throwable);
         this.errorCode = errorCode;
     }
-    public UserAlreadyExistException(OrderExceptionEnum orderExceptionEnum, Throwable throwable){
+    public ContentAlreadyExistException(OrderExceptionEnum orderExceptionEnum, Throwable throwable){
         super(orderExceptionEnum.getErrorMsg(),throwable);
         this.errorCode = orderExceptionEnum.getErrorCode();
     }

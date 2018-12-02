@@ -97,4 +97,10 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     Integer updatePermissionByStuid(@Param("stuid") String stuid,@Param("roleId") Integer roleId);
+    /**
+     * 添加用户角色
+     * @param recruit
+     * @return
+     */
+    void insertUserRole(@Param("generalMember") Integer generalMember,@Param("recruit") Recruit recruit);
 }

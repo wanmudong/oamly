@@ -18,6 +18,8 @@ public enum OrderExceptionEnum {
     USER_NOT_LOGIN_ERROR("201","用户未登录","error"),
     /** 用户已存在 */
     USER_ALREADY_EXIST_ERROR("202","用户已存在","error"),
+    /** 招新信息已存在 */
+    RECRUIT_ALREADY_EXIST_ERROR("401","招新信息已存在","error"),
     /** 查询不存在错误 */
     THIS_CONTENT_NOT_FOUND_ERROR("301","该条记录不存在","error")
     ;

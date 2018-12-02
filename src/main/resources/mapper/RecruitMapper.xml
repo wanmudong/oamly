@@ -72,4 +72,7 @@
         order by id desc
 
     </select>
+    <select id="selectByStuid" resultType="top.wanmudong.oamly.modules.user.entity.Recruit">
+        select * from oa_recruit where stuid=#{stuid};
+    </select>
 </mapper>

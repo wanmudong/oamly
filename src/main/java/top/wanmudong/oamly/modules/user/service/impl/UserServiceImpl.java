@@ -6,10 +6,12 @@ import com.github.pagehelper.PageInfo;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.xssf.usermodel.*;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import top.wanmudong.oamly.modules.common.Enum.OrderExceptionEnum;
+import top.wanmudong.oamly.modules.common.entity.SysRole;
 import top.wanmudong.oamly.modules.common.entity.SysUser;
-import top.wanmudong.oamly.modules.common.exception.UserAlreadyExistException;
+import top.wanmudong.oamly.modules.common.exception.ContentAlreadyExistException;
 import top.wanmudong.oamly.modules.common.utils.*;
 import top.wanmudong.oamly.modules.user.entity.Recruit;
 import top.wanmudong.oamly.modules.user.entity.User;
@@ -49,7 +51,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
     //初始密码为online666
     private static final String PASSWORD="online666";
+    //初始成员角色为一般成员
+    private static final int GENERALMEMBER=1;
 
+
+//    TransactionDefinition.PROPAGATION_SUPPORTS：如果当前存在事务，则加入该事务；如果当前没有事务，则以非事务的方式继续运行。
+//    TransactionDefinition.PROPAGATION_NOT_SUPPORTED：以非事务方式运行，如果当前存在事务，则把当前事务挂起。
+//    TransactionDefinition.PROPAGATION_NEVER：以非事务方式运行，如果当前存在事务，则抛出异常。
+
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public User insertUser(Recruit recruit) {
 
@@ -59,10 +69,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         int time = timeUtil.getSecondTimeNow();
 
         User userExist = baseMapper.getUserByStuid(recruit.getStuid());
-        if (userExist != null){
-            throw new UserAlreadyExistException(OrderExceptionEnum.USER_ALREADY_EXIST_ERROR);
+        List<SysRole> userRoleExist = baseMapper.getSysUserRoleList(recruit.getStuid());
+
+        if (userExist != null || userRoleExist.size()!=0){
+            throw new ContentAlreadyExistException(OrderExceptionEnum.USER_ALREADY_EXIST_ERROR);
         }
         baseMapper.insertUser(recruit,pwd,salt,time);
+        baseMapper.insertUserRole(GENERALMEMBER,recruit);
         User user = baseMapper.getUserByStuid(recruit.getStuid());
         return user;
     }

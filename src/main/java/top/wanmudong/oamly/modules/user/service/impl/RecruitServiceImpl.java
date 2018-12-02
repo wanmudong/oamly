@@ -7,12 +7,11 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import top.wanmudong.oamly.modules.common.Enum.OrderExceptionEnum;
 import top.wanmudong.oamly.modules.common.entity.SysUser;
 import top.wanmudong.oamly.modules.common.exception.ContentNotExistException;
-import top.wanmudong.oamly.modules.common.exception.SysUserException;
+import top.wanmudong.oamly.modules.common.exception.ContentAlreadyExistException;
 import top.wanmudong.oamly.modules.common.utils.*;
 import top.wanmudong.oamly.modules.user.entity.*;
 import top.wanmudong.oamly.modules.user.mapper.DictMapper;
@@ -28,12 +27,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by chenjiehao on 2018/9/22
  */
 @Service
-@Transactional(isolation = Isolation.REPEATABLE_READ)
+
 public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> implements RecruitService {
 
     @Resource
@@ -42,6 +42,11 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
     private StepsMapper stepsMapper;
     @Resource
     private UserService userService;
+
+    private static final Integer RECRUITING=1;
+    private static final Integer FIRST_TRIAL=0;
+
+
     @Override
     public Map<String, Object> getRecruitByContent(Condition condition, int pageNo, int pageSize) {
         Map map = new HashMap();
@@ -111,6 +116,7 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
     }
 
     @Override
+    @Transactional
     public RecruitDto updateRecruit(int id, int status, String desc, String depart) {
         /**
          * 0 拒绝 status 为0
@@ -139,12 +145,12 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
                 break;
             case 4:
                 //正式入职
+
                 baseMapper.updateStatus(id,2);
                 baseMapper.updateCurrent(id,status);
                 stepsMapper.updateLog(id,status,desc);
                 Recruit recruit = baseMapper.selectById(id);
                 User user  = userService.insertUser(recruit);
-
                 break;
             case 5:
                 //转部门
@@ -222,6 +228,29 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
     @Override
     public void delRecruit(int key) {
         baseMapper.deleteById(key);
+    }
+
+    @Override
+    public void insertRecruit(Recruit recruit) {
+
+
+        recruit.setTime(String.valueOf(timeUtil.getSecondTimeNow()));
+        recruit.setDepart(dictMapper.getDepartIdByName(recruit.getDepart()));
+        recruit.setCampus(dictMapper.getCampusIdByName(recruit.getCampus()));
+        recruit.setStatus(RECRUITING);
+        recruit.setCurrent(FIRST_TRIAL);
+
+        Recruit recruitExist =  baseMapper.selectByStuid(recruit.getStuid());
+
+       if (recruitExist != null){
+           recruit.setId(recruitExist.getId());
+           baseMapper.updateById(recruit);
+//           throw new ContentAlreadyExistException(OrderExceptionEnum.RECRUIT_ALREADY_EXIST_ERROR);
+           return;
+       }
+
+
+       baseMapper.insert(recruit);
     }
 
 }

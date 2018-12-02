@@ -30,4 +30,6 @@ public interface RecruitMapper extends BaseMapper<Recruit> {
      * 更新一条招新信息的部门
      */
     void updateDepart(@Param("id")int id,@Param("depart") String depart,@Param("current") int current);
+
+    Recruit selectByStuid(@Param("stuid") String stuid);
 }

@@ -8,7 +8,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Length;
+import top.wanmudong.oamly.modules.common.aop.Phone;
+import top.wanmudong.oamly.modules.common.aop.Stuid;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -27,14 +31,19 @@ public class Recruit implements Serializable {
     @TableField(exist=false)
     private int key;
     private String name;
+    @Stuid
     private String stuid;
+    @NotNull(message = "性别不能为空")
     private String  sex;
+    @Phone
     private String phone;
     private String qq;
+    @NotNull(message = "部门不能为空")
     private String depart;
     private String  time;
-    private int  status;
-    private int  current;
+    private Integer  status;
+    private Integer  current;
+    @NotNull(message = "校区不能为空")
     private String  campus;
     private String college;
     private String  major;
