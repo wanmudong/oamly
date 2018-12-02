@@ -7,6 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.DefaultSessionManager;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -23,9 +27,7 @@ import top.wanmudong.oamly.modules.user.service.UserService;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -48,20 +50,35 @@ public class LoginController {
         this.loginService = loginService;
     }
 
+    @Autowired
+    private SessionDAO sessionDAO;
+
     @Resource
     private UserService userService;
 
 
-    @PostMapping("/api/login")
+    @RequestMapping("/api/login")
     public Result login(@Valid Login login){
         String username = login.getUsername();
         String password = login.getPassword();
+        Boolean rememberMe = login.getRememberMe();
 
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        UsernamePasswordToken token;
+        if(rememberMe == null){
+             token = new UsernamePasswordToken(username, password);
+        }else {
+             token = new UsernamePasswordToken(username, password,rememberMe);
+        }
+
 
         try {
             subject.login(token);
+            //踢出当前用户在其他地方的登录
+            List<Session> loginedList = getLoginedSession(subject);
+            for (Session session : loginedList) {
+                session.setTimeout(0);
+            }
         } catch (UnknownAccountException uae) {
             log.info("对用户[{}]进行登录验证..验证未通过,未知账户", username);
 //            log.info("错误轨迹",uae);
@@ -99,7 +116,6 @@ public class LoginController {
 //            result.setSuccess(false);
 //            mo.setText("登录失败或密码错误");
 //            result.setMsg(mo);
-//
 //            return result;
             return Result.error().isNotlogin("登录失败或密码错误");
         }
@@ -135,6 +151,29 @@ public class LoginController {
         return Result.OK();
     }
 
+    //遍历同一个账户的session
+    private List<Session> getLoginedSession(Subject currentUser) {
+        Collection<Session> list = sessionDAO
+                .getActiveSessions();
+        List<Session> loginedList = new ArrayList<Session>();
+        SysUser loginUser = (SysUser) currentUser.getPrincipal();
+        for (Session session : list) {
+
+            Subject s = new Subject.Builder().session(session).buildSubject();
+
+            if (s.isAuthenticated()) {
+                SysUser user = (SysUser) s.getPrincipal();
+
+                if (user.getId().equals(loginUser.getId())) {
+                    if (!session.getId().equals(
+                            currentUser.getSession().getId())) {
+                        loginedList.add(session);
+                    }
+                }
+            }
+        }
+        return loginedList;
+    }
 
 
 }

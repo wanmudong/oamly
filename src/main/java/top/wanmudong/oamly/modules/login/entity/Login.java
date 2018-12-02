@@ -35,6 +35,8 @@ public class Login extends Model<Login> {
     @NotNull(message = "密码不可为空")
     @TableField("pwd")
     private String password;
+    @TableField(exist = false)
+    private Boolean rememberMe;
 
 
 
