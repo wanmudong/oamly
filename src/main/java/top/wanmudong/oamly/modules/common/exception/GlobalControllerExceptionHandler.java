@@ -82,11 +82,11 @@ public class GlobalControllerExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = ContentNotExistException.class)
     public Result defaultContentNotExistExceptionHandler(HttpServletRequest req, Exception e) {
-        log.error("查询内容不存在",e);
-        return Result.error("查询内容不存在");
+        log.error("[{}]",e.getMessage(),e);
+        return Result.error(e.getMessage());
     }
     /**
-     * 查询内容不存在时的未知异常统一返回
+     * 查询内容存在时的未知异常统一返回
      */
     @ResponseBody
     @ExceptionHandler(value = ContentAlreadyExistException.class)

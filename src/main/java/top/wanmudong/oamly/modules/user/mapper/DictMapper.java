@@ -34,7 +34,7 @@ public interface DictMapper extends BaseMapper<Dict> {
      * @return
      */
 
-    List<Dict> getDictByTableName(@Param("tableName") String tableName);
+    List<Dict> getDictByTableNames(@Param("tableName") String tableName);
 
     /**
      * 用部门名称获取部门代号
@@ -61,4 +61,86 @@ public interface DictMapper extends BaseMapper<Dict> {
      * @return
      */
     String selectFeedbackTypeNameById(@Param("type") int type);
+
+    /**
+     * 获取所有字典表基本信息
+     * @param
+     * @return List<Dict>
+     */
+    List<Dict> getDictSummaryList();
+
+    /**
+     * 获取对应的字典表表名
+     * @param id
+     * @return
+     */
+    String getDictTableName(@Param("id") Integer id);
+
+    /**
+     * 获取字段表中信息
+     * @param tableName
+     * @return
+     */
+    List<Dict> getDictList(@Param("tableName") String tableName);
+
+    /**
+     * 更新字段表中信息
+     */
+    Integer updateDict(@Param("tableName") String tableName,@Param("dict") Dict dict);
+
+    /**
+     * 更新字典表中信息
+     */
+    Integer updateDictSummary(@Param("dict") Dict dict);
+
+    /**
+     * 向字典表中插入新信息
+     */
+    Integer insertDictSummary(@Param("dict") Dict dict);
+
+    /**
+     * 新建一个字段表
+     */
+    Integer creatDictTable(@Param("dict") Dict dict);
+
+    /**
+     * 在字典表中删除信息
+     */
+    Integer delDictSummary(@Param("dict") Dict dict);
+
+    /**
+     * 根据表名删除一张字段表
+     * @param tableName
+     * @return
+     */
+    Integer delDictTable(@Param("tableName") String tableName);
+
+    /**
+     *以表名获取字典表数据
+     */
+    Dict getDictByTableName(@Param("tableName") String tableName);
+
+    /**
+     *以字段名获取字段表数据
+     */
+    Dict getDictByValue(@Param("dict") Dict dict);
+
+    /**
+     *以字段id获取字典表数据
+     */
+    Dict getDictByKey(@Param("key") String key);
+
+    /**
+     * 在字段表中插入一条数据
+     */
+    Integer insertDict(@Param("dict") Dict dict);
+
+    /**
+     * 修改字段表中的类型名
+     */
+    Integer updateDictBySummary(@Param("dict") Dict dict);
+    /**
+     * 在字段表中删除一条数据
+     */
+    Integer delDictInfo(@Param("dict") Dict dict);
 }

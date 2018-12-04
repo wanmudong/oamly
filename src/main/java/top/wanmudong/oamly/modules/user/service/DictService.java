@@ -20,4 +20,20 @@ public interface DictService extends IService<Dict> {
     Map<String, List<Dict>> getAllDict();
 
     List<Dict> getDictSummaryList();
+
+    List<Dict> getDictList(String key);
+
+    void updateDict(String key, Dict dict);
+
+    String getDictName(String key);
+
+    void updateDictSummary(Dict dict);
+
+    void insertDictSummary(Dict dict);
+
+    void delDictSummary(Dict dict);
+
+    void insertDict(String key, Dict dict);
+
+    void delDictInfo(String key, Dict dict);
 }

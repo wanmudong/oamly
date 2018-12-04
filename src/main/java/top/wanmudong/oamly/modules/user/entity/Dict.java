@@ -20,7 +20,7 @@ public class Dict {
 //    private String value;
 
     @TableId(value = "dict_id", type = IdType.AUTO)
-    private int key;
+    private Integer key;
 
     @TableField("dict_type_name")
     private String type;
@@ -29,8 +29,11 @@ public class Dict {
     private String value;
 
     @TableField("dict_enable")
-    private int enable;
+    private Integer enable;
 
     @TableField("dict_memo")
     private String memo;
+
+    @TableField("dict_table_name")
+    private String tableName;
 }

@@ -1,20 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.wanmudong.oamly.modules.user.mapper.DictMapper">
-    <resultMap id="dictResultMap" type="Dict" >
+    <resultMap id="dictResultMap" type="top.wanmudong.oamly.modules.user.entity.Dict" >
         <result column="dict_item_name" property="value"/>
         <result column="dict_id" property="key"/>
-        <!-- <association property="user" javaType="com.quinnnorris.mybatis.bean.User">
-            <id column="" property="" />
-            <result column="" property="" />
-        </association> -->
-        <!--<collection property="orderdetails" ofType="com.quinnnorris.mybatis.bean.Orderdetail">
-            <id column="" property=""/>
-            <result column="" property=""/>
-        </collection>-->
+        <result column="dict_type_name" property="type"/>
+        <result column="dict_enable" property="enable"/>
+        <result column="dict_memo" property="memo"/>
+        <result column="dict_table_name" property="tableName"/>
     </resultMap>
+    <insert id="insertDictSummary">
+        insert into oa_dict  (dict_item_name,dict_enable,dict_memo,dict_table_name) values (#{dict.value},#{dict.enable},#{dict.memo},#{dict.tableName})
+    </insert>
+    <insert id="insertDict">
+        insert into ${dict.tableName}  (dict_type_name,dict_item_name,dict_enable,dict_memo) values (#{dict.type},#{dict.value},#{dict.enable},#{dict.memo})
+    </insert>
+    <delete id="delDictSummary">
+        delete from oa_dict where dict_id = #{dict.key}
+    </delete>
+    <delete id="delDictTable">
+        DROP TABLE ${tableName}
+    </delete>
+    <delete id="delDictInfo">
+        delete from ${dict.tableName} where dict_id = #{dict.key}
+    </delete>
+    <select id="creatDictTable" resultType="java.lang.Integer">
+        CREATE TABLE ${dict.tableName} (
+          `dict_id` int(4) NOT NULL AUTO_INCREMENT COMMENT '数据字典id(主键)',
+          `dict_type_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '数据字典类别名称',
+          `dict_item_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '数据字典项目名称',
+          `dict_enable` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '1:使用 0:停用',
+          `dict_memo` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '备注',
+          PRIMARY KEY (`dict_id`) USING BTREE
+        ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+    </select>
+    <update id="updateDict">
+        update ${tableName}
+        set
+        <if test="dict.value != null">
+            dict_item_name = #{dict.value},
+        </if>
+        <if test="dict.enable != null">
+            dict_enable = #{dict.enable},
+        </if>
+        <if test="dict.memo != null">
+            dict_memo = #{dict.memo},
+        </if>
+            dict_id = #{dict.key}
+         where dict_id = #{dict.key}
+    </update>
+    <update id="updateDictSummary">
+        update oa_dict
+        set
+        <if test="dict.value != null">
+            dict_item_name = #{dict.value},
+        </if>
+        <if test="dict.enable != null">
+            dict_enable = #{dict.enable},
+        </if>
+        <if test="dict.memo != null">
+            dict_memo = #{dict.memo},
+        </if>
+        <if test="dict.memo != null">
+            dict_memo = #{dict.memo},
+        </if>
+        dict_id = #{dict.key}
+        where dict_id = #{dict.key}
+    </update>
+    <update id="updateDictBySummary">
+        update ${dict.tableName}
+        set
+        <if test="dict.value != null">
+            dict_type_name = #{dict.value}
+        </if>
+        where dict_type_name != null
+    </update>
 
-    <select id="getDictByTableName" resultMap="dictResultMap">
+    <select id="getDictByTableNames" resultMap="dictResultMap">
         select dict_id,dict_item_name from ${tableName}
     </select>
 
@@ -36,5 +98,23 @@
     </select>
     <select id="selectFeedbackTypeNameById" resultType="java.lang.String">
         select dict_item_name from oa_dict_feedback where dict_id=#{type}
+    </select>
+    <select id="getDictSummaryList" resultMap="dictResultMap">
+        select * from oa_dict order by dict_id
+    </select>
+    <select id="getDictTableName" resultType="java.lang.String">
+        select dict_table_name from oa_dict where dict_id=#{id}
+    </select>
+    <select id="getDictList" resultMap="dictResultMap">
+        select * from ${tableName} order by dict_id
+    </select>
+    <select id="getDictByTableName" resultMap="dictResultMap">
+        select * from oa_dict where dict_table_name = #{tableName}
+    </select>
+    <select id="getDictByValue" resultMap="dictResultMap">
+         select * from ${dict.tableName} where dict_id= #{dict.key}
+    </select>
+    <select id="getDictByKey" resultMap="dictResultMap">
+         select * from oa_dict where dict_id = #{key}
     </select>
 </mapper>

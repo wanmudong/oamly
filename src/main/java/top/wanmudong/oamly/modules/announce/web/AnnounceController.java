@@ -57,8 +57,8 @@ public class AnnounceController {
 
     /**
      * 用于删除一条通知，需要知道该条通知的id
-     * @param id
      * @return
+     * @param id
      */
     @GetMapping("/del")
     @RequiresPermissions("announce:delete")

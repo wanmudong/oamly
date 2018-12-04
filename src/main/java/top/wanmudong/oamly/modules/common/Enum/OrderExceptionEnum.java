@@ -20,8 +20,16 @@ public enum OrderExceptionEnum {
     USER_ALREADY_EXIST_ERROR("202","用户已存在","error"),
     /** 招新信息已存在 */
     RECRUIT_ALREADY_EXIST_ERROR("401","招新信息已存在","error"),
+    /** 该表已存在 */
+    TABLE_ALREADY_EXIST_ERROR("402","表已存在","error"),
+    /** 字段已存在 */
+    TABLE_FIELD_ALREADY_EXIST_ERROR("403","字段已存在","error"),
     /** 查询不存在错误 */
-    THIS_CONTENT_NOT_FOUND_ERROR("301","该条记录不存在","error")
+    THIS_CONTENT_NOT_FOUND_ERROR("301","该条记录不存在","error"),
+    /** 字段不存在 */
+    TABLE_FIELD_NOT_FOUND_ERROR("302","该字段不存在","error"),
+    /** 字段表不存在错误 */
+    TABLE_NOT_FOUND_ERROR("303","该表不存在","error")
     ;
 
     private String errorCode;
