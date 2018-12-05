@@ -1,6 +1,7 @@
 package top.wanmudong.oamly.modules.user.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Service;
 import top.wanmudong.oamly.modules.user.entity.Dict;
 
@@ -26,6 +27,8 @@ public interface DictService extends IService<Dict> {
     void updateDict(String key, Dict dict);
 
     String getDictName(String key);
+
+    Dict getDictSummary(Integer key);
 
     void updateDictSummary(Dict dict);
 

@@ -128,7 +128,7 @@ public interface DictMapper extends BaseMapper<Dict> {
     /**
      *以字段id获取字典表数据
      */
-    Dict getDictByKey(@Param("key") String key);
+    Dict getDictByKey(@Param("key") Integer key);
 
     /**
      * 在字段表中插入一条数据
@@ -143,4 +143,9 @@ public interface DictMapper extends BaseMapper<Dict> {
      * 在字段表中删除一条数据
      */
     Integer delDictInfo(@Param("dict") Dict dict);
+
+    /**
+     * 在字典表中获取字段的信息
+     */
+    Dict getDictByTableValue(@Param("value") String value);
 }

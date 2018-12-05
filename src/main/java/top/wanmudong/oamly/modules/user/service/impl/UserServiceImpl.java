@@ -51,8 +51,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
     //初始密码为online666
     private static final String PASSWORD="online666";
-    //初始成员角色为一般成员
-    private static final int GENERALMEMBER=1;
+    //一般成员
+    private static final int GENERAL_MEMBER=0;
+    //小部长
+    private static final int SMALL_MIMISTER=1;
+    //大部长
+    private static final int MAJOR_MIMISTER=2;
+    //主管
+    private static final int SUPERTVISIOR=3;
+
+
 
 
 //    TransactionDefinition.PROPAGATION_SUPPORTS：如果当前存在事务，则加入该事务；如果当前没有事务，则以非事务的方式继续运行。
@@ -75,7 +83,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new ContentAlreadyExistException(OrderExceptionEnum.USER_ALREADY_EXIST_ERROR);
         }
         baseMapper.insertUser(recruit,pwd,salt,time);
-        baseMapper.insertUserRole(GENERALMEMBER,recruit);
+        baseMapper.insertUserRole(GENERAL_MEMBER,recruit);
         User user = baseMapper.getUserByStuid(recruit.getStuid());
         return user;
     }
@@ -159,11 +167,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         //更改权限
         if ("0".equals(user.getRole())){
-            baseMapper.updatePermissionByStuid(user.getStuid(),1);
+            baseMapper.updatePermissionByStuid(user.getStuid(),GENERAL_MEMBER);
         }else if ("1".equals(user.getRole())){
-            baseMapper.updatePermissionByStuid(user.getStuid(),2);
-        }else {
-            baseMapper.updatePermissionByStuid(user.getStuid(),3);
+            baseMapper.updatePermissionByStuid(user.getStuid(),SMALL_MIMISTER);
+        }else if("2".equals(user.getRole())){
+            baseMapper.updatePermissionByStuid(user.getStuid(),MAJOR_MIMISTER);
+        }else if("3".equals(user.getRole())){
+            baseMapper.updatePermissionByStuid(user.getStuid(),SUPERTVISIOR);
         }
         Integer success  = baseMapper.updateById(user);
         return success>0;

@@ -47,15 +47,18 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     @Override
     public List<Dict> getDictList(String key) {
-        String tableName = getDictName(key);
-        List<Dict> dictList = baseMapper.getDictList(tableName);
+        Dict dictSummary = getDictSummary(Integer.valueOf(key));
+        List<Dict> dictList = baseMapper.getDictList(dictSummary.getTableName());
         return dictList;
     }
 
     @Override
+    @Transactional
     public void updateDict(String key, Dict dict) {
-        String tableName = getDictName(key);
-        Integer isSuccess = baseMapper.updateDict(tableName,dict);
+        Dict dictSummary = getDictSummary(Integer.valueOf(key));
+
+        //若表不存在会报 BadSqlGrammarException 然后被 GlobalControllerExceptionHandler 抓住
+        Integer isSuccess = baseMapper.updateDict(dictSummary.getTableName(),dict);
     }
 
     @Override
@@ -71,15 +74,27 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     @Override
     @Transactional
-    public void updateDictSummary(Dict dict) {
-        /**
-         * 更新表要保证信息存在
-         */
-
-        Dict dictSummary = baseMapper.getDictByKey(String.valueOf(dict.getKey()));
+    public Dict getDictSummary(Integer key) {
+        Dict dictSummary = baseMapper.getDictByKey(key);
         if (dictSummary == null){
             throw new ContentNotExistException(OrderExceptionEnum.TABLE_FIELD_NOT_FOUND_ERROR);
         }
+        if (dictSummary.getTableName() == null){
+            throw new ContentNotExistException(OrderExceptionEnum.TABLE_NOT_FOUND_ERROR);
+        }
+        return dictSummary;
+    }
+
+
+    @Override
+    @Transactional
+    public void updateDictSummary(Dict dict) {
+        /**
+         * 更新表要保证信息存在，
+         * 表名不允许更改
+         */
+
+        Dict dictSummary = getDictSummary(dict.getKey());
         dict.setTableName(dictSummary.getTableName());
 
         Integer isSuccessDict = baseMapper.updateDictBySummary(dict);
@@ -90,9 +105,16 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Override
     @Transactional
     public void insertDictSummary(Dict dict) {
-        Dict dictExist = baseMapper.getDictByTableName(dict.getTableName());
-        if (dictExist != null){
+        /**
+         * 插入一条数据，在字典表中这个字段信息不能存在，也要保证这个字段表不存在，
+         */
+        Dict dictTableExist = baseMapper.getDictByTableName(dict.getTableName());
+        Dict dictValueExist = baseMapper.getDictByTableValue(dict.getValue());
+        if (dictTableExist != null){
             throw new ContentAlreadyExistException(OrderExceptionEnum.TABLE_ALREADY_EXIST_ERROR);
+        }
+        if (dictValueExist != null){
+            throw new ContentAlreadyExistException(OrderExceptionEnum.TABLE_FIELD_ALREADY_EXIST_ERROR);
         }
         Integer isSuccessInsert = baseMapper.creatDictTable(dict);
         Integer isSuccess = baseMapper.insertDictSummary(dict);
@@ -102,9 +124,14 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Override
     @Transactional
     public void delDictSummary(Dict dict) {
+        /**
+         * 删除一条数据，在字典表中这个字段信息存在，也要保证这个字段表存在，
+         */
+        Dict dictSummary = getDictSummary(dict.getKey());
 
-        String tableName = getDictName(String.valueOf(dict.getKey()));
-        Integer isSuccessDel = baseMapper.delDictTable(tableName);
+        //若表不存在会报 BadSqlGrammarException 然后被 GlobalControllerExceptionHandler 抓住
+        Integer isSuccessDel = baseMapper.delDictTable(dictSummary.getTableName());
+
         Integer isSuccess = baseMapper.delDictSummary(dict);
     }
 
@@ -114,23 +141,9 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         /**
          * 插入一条数据，在字典表中这个表信息存在，也要保证这个字段表存在，
          */
-        Dict dictSummary = baseMapper.getDictByKey(key);
-        if (dictSummary == null){
-            throw new ContentNotExistException(OrderExceptionEnum.TABLE_FIELD_NOT_FOUND_ERROR);
-        }
-        if (dictSummary.getTableName() == null){
-            throw new ContentNotExistException(OrderExceptionEnum.TABLE_NOT_FOUND_ERROR);
-        }
+        Dict dictSummary = getDictSummary(Integer.valueOf(key));
         dict.setType(dictSummary.getValue());
         dict.setTableName(dictSummary.getTableName());
-
-//        Dict dictExist = baseMapper.getDictByValue(dict);
-//
-//        if (dictExist == null){
-//            throw new ContentAlreadyExistException(OrderExceptionEnum.TABLE_NOT_FOUND_ERROR);
-//        }
-
-
 
         Integer isSuccess = baseMapper.insertDict(dict);
     }
@@ -141,10 +154,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         /**
          * 删除一条数据，在字典表中这个表信息存在，也要保证这个字段表的字段存在，
          */
-        Dict dictSummary = baseMapper.getDictByKey(key);
-        if (dictSummary == null){
-            throw new ContentNotExistException(OrderExceptionEnum.TABLE_FIELD_NOT_FOUND_ERROR);
-        }
+        Dict dictSummary = getDictSummary(Integer.valueOf(key));
+
         dict.setType(dictSummary.getValue());
         dict.setTableName(dictSummary.getTableName());
 

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -103,5 +104,15 @@ public class GlobalControllerExceptionHandler {
         log.error("数据库插入或更新异常",e);
         return Result.error("数据库插入或更新异常");
     }
+    /**
+     * 执行sql语句时出现了语法错误
+     */
+    @ResponseBody
+    @ExceptionHandler(value = BadSqlGrammarException.class)
+    public Result defaultBadSqlGrammarExceptionHandler(HttpServletRequest req, Exception e) {
+        log.error("SQL语法错误",e);
+        return Result.error("SQL语法错误");
+    }
+
 
 }

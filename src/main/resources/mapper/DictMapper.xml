@@ -117,4 +117,7 @@
     <select id="getDictByKey" resultMap="dictResultMap">
          select * from oa_dict where dict_id = #{key}
     </select>
+    <select id="getDictByTableValue" resultMap="dictResultMap">
+        select * from oa_dict where dict_item_name = #{value}
+    </select>
 </mapper>

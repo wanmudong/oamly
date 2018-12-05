@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import top.wanmudong.oamly.modules.common.aop.dictTableName;
 
 /**
  * Created by chenjiehao on 2018/11/14
@@ -34,6 +35,7 @@ public class Dict {
     @TableField("dict_memo")
     private String memo;
 
+    @dictTableName
     @TableField("dict_table_name")
     private String tableName;
 }
