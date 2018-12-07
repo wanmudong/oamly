@@ -165,14 +165,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             password = md5_salt(password, salt);
             user.setPwd(password);
         }
+        SysUser sysUserNow = SysUserHere.getSysUser();
+
         //更改权限
-        if ("0".equals(user.getRole())){
+        if ("0".equals(user.getRole()) && Integer.valueOf(sysUser.getRole())>GENERAL_MEMBER){
             baseMapper.updatePermissionByStuid(user.getStuid(),GENERAL_MEMBER);
-        }else if ("1".equals(user.getRole())){
+        }else if ("1".equals(user.getRole())&& Integer.valueOf(sysUser.getRole())>SMALL_MIMISTER){
             baseMapper.updatePermissionByStuid(user.getStuid(),SMALL_MIMISTER);
-        }else if("2".equals(user.getRole())){
+        }else if("2".equals(user.getRole())&& Integer.valueOf(sysUser.getRole())>MAJOR_MIMISTER){
             baseMapper.updatePermissionByStuid(user.getStuid(),MAJOR_MIMISTER);
-        }else if("3".equals(user.getRole())){
+        }else if("3".equals(user.getRole())&& Integer.valueOf(sysUser.getRole())>SUPERTVISIOR){
             baseMapper.updatePermissionByStuid(user.getStuid(),SUPERTVISIOR);
         }
         Integer success  = baseMapper.updateById(user);

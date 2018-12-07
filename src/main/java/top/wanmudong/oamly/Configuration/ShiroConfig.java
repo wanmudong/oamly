@@ -206,8 +206,8 @@ public class ShiroConfig {
         listeners.add(new ShiroSessionListener());
         sessionManager.setSessionListeners(listeners);
         sessionManager.setSessionDAO(sessionDAO());
-        //设置会话的全局过期时间（毫秒为单位），默认 30 分钟：
-        sessionManager.setGlobalSessionTimeout(180000);
+        //设置会话的全局过期时间（毫秒为单位），默认 一天：
+        sessionManager.setGlobalSessionTimeout(24*60*60*1000);
 
         sessionManager.setSessionIdCookie(simpleCookie());
         //是否启用 / 禁用 Session Id Cookie，默认是启用的；如果禁用后将不会设置 Session Id Cookie，即默认使用了 Servlet 容器的 JSESSIONID，且通过 URL 重写（URL 中的 “;JSESSIONID=id” 部分）保存 Session Id。
@@ -240,7 +240,7 @@ public class ShiroConfig {
         // 设置cookie名称，对应login.html页面的<input type="checkbox" name="rememberMe"/>
         SimpleCookie cookie = new SimpleCookie("rememberMe");
         // 设置cookie的过期时间，单位为秒，这里为一天
-        cookie.setMaxAge(86400);
+        cookie.setMaxAge(24*60*60);
         return cookie;
     }
     /**
