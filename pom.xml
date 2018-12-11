@@ -40,6 +40,7 @@
         <ehcache.version>2.10.4</ehcache.version>
         <kaptcha.version>0.0.9</kaptcha.version>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
+        <jedis.version>2.9.0</jedis.version>
     </properties>
 
     <dependencies>
@@ -55,6 +56,24 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
+        <!-- jedis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>top.wanmudong</groupId>
+            <artifactId>redis</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>

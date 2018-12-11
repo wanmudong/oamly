@@ -92,7 +92,7 @@ public class RecruitController {
     /**
      * 新增招新信息/修改招新信息
      */
-    @GetMapping("/api/recruit/add")
+    @PostMapping("/api/recruit/add")
     @ResponseBody
     public Result insertRecruit(@Valid Recruit recruit, BindingResult result){
         if (result.hasErrors()){

@@ -32,4 +32,6 @@ public interface RecruitMapper extends BaseMapper<Recruit> {
     void updateDepart(@Param("id")int id,@Param("depart") String depart,@Param("current") int current);
 
     Recruit selectByStuid(@Param("stuid") String stuid);
+
+    List<Recruit> selectBystatus(@Param("i") int i);
 }

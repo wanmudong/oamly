@@ -75,4 +75,7 @@
     <select id="selectByStuid" resultType="top.wanmudong.oamly.modules.user.entity.Recruit">
         select * from oa_recruit where stuid=#{stuid};
     </select>
+    <select id="selectBystatus" resultType="top.wanmudong.oamly.modules.user.entity.Recruit">
+         select * from oa_recruit where status=#{i};
+    </select>
 </mapper>

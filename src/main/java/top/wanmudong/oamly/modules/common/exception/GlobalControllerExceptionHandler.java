@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.wanmudong.oamly.modules.common.utils.Result;
+import top.wanmudong.redis.exception.RedisLockException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -113,6 +114,15 @@ public class GlobalControllerExceptionHandler {
         log.error("SQL语法错误",e);
         return Result.error("SQL语法错误");
     }
-
+    /**
+     * 拦截redisLock异常
+     *
+     * @param e redisLock异常
+     */
+    @ExceptionHandler(RedisLockException.class)
+    public Result handleRedisLockException(RedisLockException e) {
+        log.error("拦截到redisLock异常:{}", e.getMessage(), e);
+        return Result.error("服务器繁忙, 请稍后再试");
+    }
 
 }

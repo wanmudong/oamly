@@ -5,11 +5,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import top.wanmudong.oamly.modules.user.entity.Recruit;
 import top.wanmudong.oamly.modules.user.entity.User;
+import top.wanmudong.oamly.modules.user.service.RecruitService;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static top.wanmudong.redis.SpringContextHolder.getContext;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class OamlyApplicationTests {
+public class OamlyApplicationTests  extends BaseMvcTest {
 
     @Test
     public void contextLoads() {
@@ -32,5 +43,50 @@ public class OamlyApplicationTests {
                 .orderBy("dd").orderBy("d1,d2");
         System.out.println(ew.getSqlSegment());
     }
+    @Test
+    public void saveRecord_thread_test() throws InterruptedException {
+        RecruitService recordService = getContext().getBean(RecruitService.class);
 
+        int threadNum = 10;
+
+        ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
+        CyclicBarrier barrier = new CyclicBarrier(threadNum);
+        CountDownLatch latch=new CountDownLatch(threadNum);
+        AtomicInteger count = new AtomicInteger(10);
+
+        for (int i = 0; i < threadNum; i++) {
+            executorService.execute(() -> {
+                Recruit query = new Recruit();
+                query.setName("douzhanshen");
+               query.setSex("男");
+               query.setDepart("技术部");
+               query.setDepart("屯溪路校区");
+               query.setStuid("2016214224");
+               query.setPhone("15855152923");
+                query.setCollege(String.valueOf(count.getAndIncrement()));
+
+                try {
+                    barrier.await();
+                } catch (InterruptedException | BrokenBarrierException e) {
+                    //ignore
+                }
+                try {
+                    recordService.insertRecruit(query);
+                }finally {
+                    latch.countDown();
+                }
+            });
+        }
+        latch.await();
+        executorService.shutdown();
+    }
+    private Date strToDate(String dateStr) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return format.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new Date();
+        }
+    }
 }

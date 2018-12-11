@@ -19,6 +19,7 @@ import top.wanmudong.oamly.modules.user.mapper.RecruitMapper;
 import top.wanmudong.oamly.modules.user.mapper.StepsMapper;
 import top.wanmudong.oamly.modules.user.service.RecruitService;
 import top.wanmudong.oamly.modules.user.service.UserService;
+import top.wanmudong.redis.annotation.Lock;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -231,26 +232,35 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
     }
 
     @Override
+    @Lock(lockKey = "insertRecruit", expireTime = 5000,timeout = 2000)
     public void insertRecruit(Recruit recruit) {
 
 
         recruit.setTime(String.valueOf(timeUtil.getSecondTimeNow()));
-        recruit.setDepart(dictMapper.getDepartIdByName(recruit.getDepart()));
+//        recruit.setDepart(dictMapper.getDepartIdByName(recruit.getDepart()));
+        recruit.setDepart("3");
         recruit.setCampus(dictMapper.getCampusIdByName(recruit.getCampus()));
-        recruit.setStatus(RECRUITING);
+        recruit.setStatus(5);
         recruit.setCurrent(FIRST_TRIAL);
 
-        Recruit recruitExist =  baseMapper.selectByStuid(recruit.getStuid());
+//        Recruit recruitExist =  baseMapper.selectByStuid(recruit.getStuid());
+        List<Recruit> saveOrUpdateList = new ArrayList<>();
+        List<Recruit> recruitExist = baseMapper.selectBystatus(5);
+        for (Recruit recruit1:recruitExist){
+            recruit1.setStatus(1);
+            saveOrUpdateList.add(recruit1);
+        }
+        saveOrUpdateList.add(recruit);
+        insertOrUpdateBatch(saveOrUpdateList);
+//       if (recruitExist != null){
+//           recruit.setId(recruitExist.getId());
+//           baseMapper.updateById(recruit);
+////           throw new ContentAlreadyExistException(OrderExceptionEnum.RECRUIT_ALREADY_EXIST_ERROR);
+//           return;
+//       }
 
-       if (recruitExist != null){
-           recruit.setId(recruitExist.getId());
-           baseMapper.updateById(recruit);
-//           throw new ContentAlreadyExistException(OrderExceptionEnum.RECRUIT_ALREADY_EXIST_ERROR);
-           return;
-       }
 
-
-       baseMapper.insert(recruit);
+//       baseMapper.insert(recruit);
     }
 
 }
