@@ -44,8 +44,9 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
     @Resource
     private UserService userService;
 
-    private static final Integer RECRUITING=1;
-    private static final Integer FIRST_TRIAL=0;
+    private static final Integer RECRUITING = 1;
+    private static final Integer FIRST_TRIAL = 0;
+    private static final String DEFAUL_MESSAGE = " 申请加入，待处理";
 
 
     @Override
@@ -232,35 +233,35 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
     }
 
     @Override
-    @Lock(lockKey = "insertRecruit", expireTime = 5000,timeout = 2000)
+    @Transactional
+//    @Lock(lockKey = "insertRecruit", expireTime = 5000,timeout = 2000)
     public void insertRecruit(Recruit recruit) {
 
 
         recruit.setTime(String.valueOf(timeUtil.getSecondTimeNow()));
-//        recruit.setDepart(dictMapper.getDepartIdByName(recruit.getDepart()));
-        recruit.setDepart("3");
+        recruit.setDepart(dictMapper.getDepartIdByName(recruit.getDepart()));
         recruit.setCampus(dictMapper.getCampusIdByName(recruit.getCampus()));
         recruit.setStatus(5);
         recruit.setCurrent(FIRST_TRIAL);
 
-//        Recruit recruitExist =  baseMapper.selectByStuid(recruit.getStuid());
-        List<Recruit> saveOrUpdateList = new ArrayList<>();
-        List<Recruit> recruitExist = baseMapper.selectBystatus(5);
-        for (Recruit recruit1:recruitExist){
-            recruit1.setStatus(1);
-            saveOrUpdateList.add(recruit1);
-        }
-        saveOrUpdateList.add(recruit);
-        insertOrUpdateBatch(saveOrUpdateList);
-//       if (recruitExist != null){
-//           recruit.setId(recruitExist.getId());
-//           baseMapper.updateById(recruit);
-////           throw new ContentAlreadyExistException(OrderExceptionEnum.RECRUIT_ALREADY_EXIST_ERROR);
-//           return;
-//       }
+        Recruit recruitExist =  baseMapper.selectByStuid(recruit.getStuid());
+
+       if (recruitExist != null){
+           recruit.setId(recruitExist.getId());
+           baseMapper.updateById(recruit);
+//           throw new ContentAlreadyExistException(OrderExceptionEnum.RECRUIT_ALREADY_EXIST_ERROR);
+           return;
+       }
 
 
-//       baseMapper.insert(recruit);
+       baseMapper.insert(recruit);
+
+       Recruit recruitInsert =  baseMapper.selectByStuid(recruit.getStuid());
+       Integer id = recruitInsert.getId();
+       String stepZero = timeUtil.dateTime(Long.parseLong(recruitInsert.getTime())) + DEFAUL_MESSAGE;
+
+       baseMapper.insertRecruitLog(id,stepZero);
+
     }
 
 }

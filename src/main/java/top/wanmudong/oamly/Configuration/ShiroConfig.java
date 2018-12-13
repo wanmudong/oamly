@@ -225,7 +225,7 @@ public class ShiroConfig {
         //设置 Cookie 的路径，默认空，即存储在域名根下；
         //simpleCookie.setPath();
         //设置 Cookie 的过期时间，秒为单位，默认 - 1 表示关闭浏览器时过期 Cookie
-        simpleCookie.setMaxAge(1800);
+        simpleCookie.setMaxAge(-1);
         //如果设置为 true，则客户端不会暴露给客户端脚本代码，使用 HttpOnly cookie 有助于减少某些类型的跨站点脚本攻击；此特性需要实现了 Servlet 2.5 MR6 及以上版本的规范的 Servlet 容器支持；
         simpleCookie.setHttpOnly(false);
 

@@ -2,7 +2,6 @@ package top.wanmudong.oamly;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.JedisPool;
 import top.wanmudong.redis.RedisLock;
 

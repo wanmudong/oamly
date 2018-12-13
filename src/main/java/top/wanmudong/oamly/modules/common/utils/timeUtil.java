@@ -3,9 +3,6 @@ package top.wanmudong.oamly.modules.common.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by chenjiehao on 2018/9/19
- */
 
 /**
  * 对对时间进行操作的工具类
@@ -71,5 +68,8 @@ public class timeUtil {
 //        Date date = new Date(time * 1000);
 //        String time_model = simpleDateFormat.format(date);
 //        return time_model;
+    }
+    public static String dateTime(long time){
+        return  dateTime(time,"yyyy-MM-dd");
     }
 }

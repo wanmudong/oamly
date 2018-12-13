@@ -32,11 +32,11 @@ public class RedisLockAspect {
 
     }
 
-    @Before("pointcut()")
-    public void before(JoinPoint joinPoint)throws  Throwable{
-        System.out.println(joinPoint.getArgs());
-        System.out.println("wanmudong");
-    }
+//    @Before("pointcut()")
+//    public void before(JoinPoint joinPoint)throws  Throwable{
+//        System.out.println(joinPoint.getArgs());
+//        System.out.println("wanmudong");
+//    }
 
     @Around("pointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {

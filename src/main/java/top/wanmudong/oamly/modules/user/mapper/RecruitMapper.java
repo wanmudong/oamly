@@ -3,6 +3,7 @@ package top.wanmudong.oamly.modules.user.mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.aspectj.lang.annotation.Pointcut;
 import top.wanmudong.oamly.modules.common.entity.SysUser;
 import top.wanmudong.oamly.modules.common.utils.Condition;
 import top.wanmudong.oamly.modules.user.entity.Recruit;
@@ -34,4 +35,6 @@ public interface RecruitMapper extends BaseMapper<Recruit> {
     Recruit selectByStuid(@Param("stuid") String stuid);
 
     List<Recruit> selectBystatus(@Param("i") int i);
+
+    void insertRecruitLog(@Param("id") Integer id,@Param("stepZero") String stepZero);
 }

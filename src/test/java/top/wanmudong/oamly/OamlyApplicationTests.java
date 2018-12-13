@@ -11,12 +11,9 @@ import top.wanmudong.oamly.modules.user.service.RecruitService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static top.wanmudong.redis.SpringContextHolder.getContext;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

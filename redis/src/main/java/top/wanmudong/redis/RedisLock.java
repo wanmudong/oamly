@@ -27,7 +27,7 @@ public class RedisLock {
     }
 
     public static RedisLock getInstance() {
-        return new RedisLock(SpringContextHolder.getBean(JedisPool.class));
+        return new RedisLock(SpringContextHolderRedis.getBean(JedisPool.class));
     }
 
     private Jedis getJedis() {

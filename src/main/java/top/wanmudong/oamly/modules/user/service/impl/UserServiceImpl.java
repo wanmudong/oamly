@@ -1,5 +1,6 @@
 package top.wanmudong.oamly.modules.user.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -13,6 +14,7 @@ import top.wanmudong.oamly.modules.common.Enum.OrderExceptionEnum;
 import top.wanmudong.oamly.modules.common.entity.SysRole;
 import top.wanmudong.oamly.modules.common.entity.SysUser;
 import top.wanmudong.oamly.modules.common.exception.ContentAlreadyExistException;
+import top.wanmudong.oamly.modules.common.exception.ContentNotExistException;
 import top.wanmudong.oamly.modules.common.utils.*;
 import top.wanmudong.oamly.modules.user.entity.Recruit;
 import top.wanmudong.oamly.modules.user.entity.User;
@@ -250,5 +252,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void updateMemberByMe(String key, User user) {
             baseMapper.updateMemberByMe(user);
+    }
+
+    @Override
+    public void isExistMember(Integer stuid) {
+        User memberExist = selectOne(new EntityWrapper<User>().eq("stuid",stuid));
+
+        if (memberExist == null){
+            throw  new ContentNotExistException(OrderExceptionEnum.Member_NOT_FOUND_ERROR);
+        }
     }
 }

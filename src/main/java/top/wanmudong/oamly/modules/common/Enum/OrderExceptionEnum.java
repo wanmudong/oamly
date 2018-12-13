@@ -18,18 +18,37 @@ public enum OrderExceptionEnum {
     USER_NOT_LOGIN_ERROR("201","用户未登录","error"),
     /** 用户已存在 */
     USER_ALREADY_EXIST_ERROR("202","用户已存在","error"),
+    /** 数据已存在 */
+    TABLE_PIECE_OF_DATA_ALREADY_EXIST_ERROR("400","数据已存在","error"),
     /** 招新信息已存在 */
     RECRUIT_ALREADY_EXIST_ERROR("401","招新信息已存在","error"),
     /** 该表已存在 */
     TABLE_ALREADY_EXIST_ERROR("402","表已存在","error"),
     /** 字段已存在 */
     TABLE_FIELD_ALREADY_EXIST_ERROR("403","字段已存在","error"),
+    /** 角色已存在 */
+    ROLE_ALREADY_EXIST_ERROR("404","角色已存在","error"),
+    /** 权限已存在 */
+    PERMISSION_ALREADY_EXIST_ERROR("405","权限已存在","error"),
+    /** 成员已存在 */
+    Member_ALREADY_EXIST_ERROR("406","成员已存在","error"),
+
+
+
+    /** 数据已存在 */
+    TABLE_PIECE_OF_DATA_NOT_FOUND_ERROR("300","数据不存在","error"),
     /** 查询不存在错误 */
     THIS_CONTENT_NOT_FOUND_ERROR("301","该条记录不存在","error"),
     /** 字段不存在 */
     TABLE_FIELD_NOT_FOUND_ERROR("302","该字段不存在","error"),
     /** 字段表不存在错误 */
-    TABLE_NOT_FOUND_ERROR("303","该表不存在","error")
+    TABLE_NOT_FOUND_ERROR("303","该表不存在","error"),
+    /** 角色不存在 */
+    ROLE_NOT_FOUND_ERROR("304","角色不存在","error"),
+    /** 权限不存在 */
+    PERMISSION_NOT_FOUND_ERROR("305","权限不存在","error"),
+    /** 成员不存在 */
+    Member_NOT_FOUND_ERROR("306","成员不存在","error"),
     ;
 
     private String errorCode;

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.wanmudong.oamly.modules.user.mapper.RecruitMapper">
+    <insert id="insertRecruitLog">
+        insert into oa_recruit_log (rid, step_0) values (#{id}, #{stepZero})
+    </insert>
     <update id="updateStatus">
         update oa_recruit set status = #{status} where id = #{id}
     </update>

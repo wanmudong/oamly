@@ -1,61 +1,48 @@
-//package top.wanmudong.oamly.modules.common.utils;
-//
-//import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-//import com.baomidou.mybatisplus.plugins.Page;
-//import org.apache.commons.lang3.StringUtils;
-//
-//import java.util.Map;
-//
-///**
-// * @author chenliangliang
-// * @date 2018/2/19
-// */
-//public class PageQuery<T> {
-//
-//    /**
-//     * mybatis-plus分页参数
-//     */
-//    private Page<T> pageParam;
-//
-//    /**
-//     * 当前页码
-//     */
-//    private int page = 1;
-//    /**
-//     * 每页条数
-//     */
-//    private int size = 10;
-//
-//    public PageQuery(Map<String, Object> params) {
-//        //分页参数
-//        if (params.get("page") != null) {
-//            page = Integer.parseInt((String) params.get("page"));
-//        }
-//        if (params.get("size") != null) {
-//            size = Integer.parseInt((String) params.get("size"));
-//        }
-//        String sidx = (String)params.get("sidx");
-//        String order = (String)params.get("order");
-//
-//        this.pageParam=new Page<>(page,size);
-//
-//        //排序
-//        if(StringUtils.isNotBlank(sidx) && StringUtils.isNotBlank(order)){
-//            this.pageParam.setOrderByField(sidx);
-//            this.pageParam.setAsc("ASC".equalsIgnoreCase(order));
-//        }
-//    }
-//
-//
-//    public Page<T> getPageParam() {
-//        return pageParam;
-//    }
-//
-//    public int getPage() {
-//        return page;
-//    }
-//
-//    public int getSize() {
-//        return size;
-//    }
-//}
+package top.wanmudong.oamly.modules.common.utils;
+
+import com.github.pagehelper.PageHelper;
+import lombok.Data;
+
+/**
+ * @author wanmudong
+ * @date 15:25 2018/12/12
+ *
+ * 查询参数
+ */
+@Data
+public class PageQuery {
+
+    /**
+     * 每页大小
+     */
+    private int size = 10;
+    /**
+     * 当前页
+     */
+    private int page = 1;
+    /**
+     * 0为倒序，1为正序
+     */
+    private int isAsc = 1;
+    /**
+     * 排序
+     */
+    private String orderBy  = "id";
+
+    private String orderDesc  = orderBy + " desc";
+
+    /**
+     * 为PageHelper开启查询参数
+     * @param pageQuery 查询参数
+     */
+    public static void startPage(PageQuery pageQuery){
+
+        if (1 == pageQuery.isAsc){
+            PageHelper.startPage(pageQuery.getPage(),pageQuery.getSize(),pageQuery.getOrderBy());
+        }else {
+            PageHelper.startPage(pageQuery.getPage(),pageQuery.getSize(),pageQuery.getOrderDesc());
+        }
+
+    }
+
+}

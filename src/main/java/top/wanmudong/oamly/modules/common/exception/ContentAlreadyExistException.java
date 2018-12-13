@@ -6,7 +6,7 @@ import top.wanmudong.oamly.modules.common.Enum.OrderExceptionEnum;
 /**
  * Created by chenjiehao on 2018/11/20
  *
- * 查询的内容不存在
+ * 查询的内容存在
  */
 public class ContentAlreadyExistException extends  RuntimeException {
 

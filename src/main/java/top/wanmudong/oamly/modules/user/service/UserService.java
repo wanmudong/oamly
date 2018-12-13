@@ -39,4 +39,10 @@ public interface UserService extends IService<User> {
         void updateMemberPwd(String uid, String oldPwd, String newPwd);
 
         void updateMemberByMe(String key, User user);
+
+        /**
+         * 学号对应的成员是否存在
+         * @param stuid
+         */
+        void isExistMember(Integer stuid);
 }

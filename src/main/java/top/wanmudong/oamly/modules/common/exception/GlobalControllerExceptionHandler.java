@@ -5,6 +5,10 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +17,9 @@ import top.wanmudong.redis.exception.RedisLockException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chenjiehao on 2018/10/26
@@ -115,14 +122,36 @@ public class GlobalControllerExceptionHandler {
         return Result.error("SQL语法错误");
     }
     /**
+     * 检验参数时参数出现错误
+     */
+    @ResponseBody
+    @ExceptionHandler(value = BindException.class)
+    public Result defaultBindExceptionHandler(HttpServletRequest req, BindException e) {
+
+        Map<String, String> messages = new HashMap<>();
+        BindingResult result = e.getBindingResult();
+        if (result.hasErrors()) {
+            List<ObjectError> errors = result.getAllErrors();
+//            for (ObjectError error : errors) {
+//                FieldError fieldError = (FieldError) error;
+                ObjectError error = errors.get(0);
+                log.error(error.getDefaultMessage());
+                return Result.error(error.getDefaultMessage());
+//            }
+        }
+        return Result.error("系统错误");
+    }
+    /**
      * 拦截redisLock异常
      *
      * @param e redisLock异常
      */
+    @ResponseBody
     @ExceptionHandler(RedisLockException.class)
     public Result handleRedisLockException(RedisLockException e) {
         log.error("拦截到redisLock异常:{}", e.getMessage(), e);
         return Result.error("服务器繁忙, 请稍后再试");
     }
+
 
 }
