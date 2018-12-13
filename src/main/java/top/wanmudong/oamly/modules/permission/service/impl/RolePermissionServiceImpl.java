@@ -81,6 +81,8 @@ public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper,
     public void delRolePermission(Integer id) {
         RolePermission rolePermission = selectById(id);
 
+
+
         if (rolePermission == null){
             throw new ContentNotExistException(OrderExceptionEnum.TABLE_PIECE_OF_DATA_NOT_FOUND_ERROR);
         }
@@ -96,7 +98,16 @@ public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper,
         RolePermission rolePermissionExist = selectById(id);
 
         if (rolePermissionExist == null){
-            throw  new ContentAlreadyExistException(OrderExceptionEnum.TABLE_PIECE_OF_DATA_NOT_FOUND_ERROR);
+            throw  new ContentNotExistException(OrderExceptionEnum.TABLE_PIECE_OF_DATA_NOT_FOUND_ERROR);
+        }
+
+        RolePermission rolePermissionAllExist = selectOne(new EntityWrapper<RolePermission>()
+                .eq("permission_id",rolePermission.getPermissionId())
+                .eq("role_id",rolePermission.getRoleId())
+        );
+
+        if (rolePermissionAllExist != null){
+            throw  new ContentAlreadyExistException(OrderExceptionEnum.TABLE_PIECE_OF_DATA_ALREADY_EXIST_ERROR);
         }
 
         updateById(rolePermission);

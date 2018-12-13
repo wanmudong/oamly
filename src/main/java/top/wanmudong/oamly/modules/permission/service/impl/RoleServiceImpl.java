@@ -11,10 +11,16 @@ import top.wanmudong.oamly.modules.common.exception.ContentNotExistException;
 import top.wanmudong.oamly.modules.common.utils.ContentContext.PermissionContext;
 import top.wanmudong.oamly.modules.common.utils.MyPageInfo;
 import top.wanmudong.oamly.modules.common.utils.PageQuery;
+import top.wanmudong.oamly.modules.permission.entity.MemberRole;
 import top.wanmudong.oamly.modules.permission.entity.Role;
+import top.wanmudong.oamly.modules.permission.entity.RolePermission;
 import top.wanmudong.oamly.modules.permission.mapper.SRoleMapper;
+import top.wanmudong.oamly.modules.permission.service.MemberRoleService;
+import top.wanmudong.oamly.modules.permission.service.RolePermissionService;
 import top.wanmudong.oamly.modules.permission.service.RoleService;
 import top.wanmudong.redis.annotation.Lock;
+
+import javax.annotation.Resource;
 
 /**
  * @author wanmudong
@@ -22,6 +28,13 @@ import top.wanmudong.redis.annotation.Lock;
  */
 @Service
 public class RoleServiceImpl extends ServiceImpl<SRoleMapper,Role> implements RoleService {
+
+    @Resource
+    private MemberRoleService memberRoleService;
+
+    @Resource
+    private RolePermissionService rolePermissionService;
+
     @Override
     public MyPageInfo<Role> selectRoleList(PageQuery pageQuery) {
         PageQuery.startPage(pageQuery);
@@ -55,8 +68,13 @@ public class RoleServiceImpl extends ServiceImpl<SRoleMapper,Role> implements Ro
     }
 
     @Override
+    @Transactional
+    @Lock(lockKey = "delRole",expireTime = 5000,timeout = 2000)
     public void delRole(Integer id) {
         isExistRole(id);
+
+        memberRoleService.delete(new EntityWrapper<MemberRole>().eq("role_id",id));
+        rolePermissionService.delete(new EntityWrapper<RolePermission>().eq("role_id",id));
 
         deleteById(id);
     }

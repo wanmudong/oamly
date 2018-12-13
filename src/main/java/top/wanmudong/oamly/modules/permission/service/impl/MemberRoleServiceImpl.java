@@ -52,7 +52,7 @@ public class MemberRoleServiceImpl extends ServiceImpl<MemberRoleMapper,MemberRo
         Integer roleId = Integer.valueOf(memberRole.getRoleId());
         Integer stuid = Integer.valueOf(memberRole.getStuid());
 
-
+        //判断角色与成员是否存在
         roleService.isExistRole(roleId);
         userService.isExistMember(stuid);
 
@@ -61,6 +61,7 @@ public class MemberRoleServiceImpl extends ServiceImpl<MemberRoleMapper,MemberRo
              //   .eq("role_id",memberRole.getRoleId())
         );
 
+        //判断角色与成员的对应关系是否已经存在
         if (memberRoleExist != null){
             throw  new ContentAlreadyExistException(OrderExceptionEnum.TABLE_PIECE_OF_DATA_ALREADY_EXIST_ERROR);
         }
@@ -75,6 +76,7 @@ public class MemberRoleServiceImpl extends ServiceImpl<MemberRoleMapper,MemberRo
 
         MemberRole memberRoleExist = selectById(id);
 
+        //判断成员角色对应关系是否存在
         if (memberRoleExist == null){
             throw new ContentNotExistException(OrderExceptionEnum.TABLE_PIECE_OF_DATA_NOT_FOUND_ERROR);
         }
@@ -88,9 +90,20 @@ public class MemberRoleServiceImpl extends ServiceImpl<MemberRoleMapper,MemberRo
 
         MemberRole memberRoleExist = selectById(id);
 
+        //判断成员角色对应关系是否存在
         if (memberRoleExist == null){
             throw new ContentNotExistException(OrderExceptionEnum.TABLE_PIECE_OF_DATA_NOT_FOUND_ERROR);
         }
+
+        MemberRole memberRoleAllExist = selectOne(new EntityWrapper<MemberRole>()
+                        .eq("stuid",memberRole.getStuid())
+                        .eq("role_id",memberRole.getRoleId())
+        );
+        //判断修改后的角色与成员的对应关系是否已经存在
+        if (memberRoleAllExist != null){
+            throw  new ContentAlreadyExistException(OrderExceptionEnum.TABLE_PIECE_OF_DATA_ALREADY_EXIST_ERROR);
+        }
+
 
         updateById(memberRole);
     }

@@ -119,6 +119,7 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
 
     @Override
     @Transactional
+    @Lock(lockKey = "updateRecruit",expireTime = 5000,timeout = 2000)
     public RecruitDto updateRecruit(int id, int status, String desc, String depart) {
         /**
          * 0 拒绝 status 为0
