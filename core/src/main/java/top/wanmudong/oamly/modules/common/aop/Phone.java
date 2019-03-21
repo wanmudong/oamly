@@ -28,7 +28,7 @@ import org.hibernate.validator.constraints.Length;
  *
  */
 @ConstraintComposition(CompositionType.OR)
-@Pattern(regexp = "1[3|4|5|7|8][0-9]\\d{8}")
+@Pattern(regexp = "1[3-9][0-9]\\d{8}")
 //@Null
 //@Length(min = 0, max = 11)
 @Documented
