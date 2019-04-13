@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class RedisConfig {
 
 
-    private String host= "6379";
+    private String host= "localhost:6379";
 
     private int timeout = 2*60*60*1000;
 
